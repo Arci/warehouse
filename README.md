@@ -1,5 +1,4 @@
-## The Task
-The assignment is to implement a warehouse software. 
+## Warehouse software
 
 This software should hold **articles**, and the articles should contain an **identification number**, a **name** and **available stock.** 
 It should be possible to **load articles** into the software **from a file**, see `inventory.json`.
