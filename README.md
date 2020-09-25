@@ -1,6 +1,6 @@
 ## Warehouse software
 
-This software should hold **articles**, and the articles should contain an **identification number**, a **name** and **available stock.** 
+This software should hold **articles**, and the articles should contain an **identification number**, a **name** and **available stock**. 
 It should be possible to **load articles** into the software **from a file**, see `inventory.json`.
 
 The warehouse software should also have **products**, products are made of different articles. 
