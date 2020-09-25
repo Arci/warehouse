@@ -1,0 +1,13 @@
+**/target/
+**/.idea/
+**/.classpath
+**/.project
+**/.settings/
+**/*.iml
+**/*.iws
+**/.metadata/
+**/.recommenders/
+**/.DS_Store
+*.bak
+**/lib/
+.resourceCache
