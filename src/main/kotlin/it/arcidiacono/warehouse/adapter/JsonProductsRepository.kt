@@ -25,7 +25,7 @@ class JsonProductsRepository(
         try {
             Right(mapper.readValue(this))
         } catch (e: Exception) {
-            Left(ThrowableFailure(e))
+            Left(ProductsDeserializationError(e))
         }
 
     private fun ProductsDao.toDomain(): List<Product> =

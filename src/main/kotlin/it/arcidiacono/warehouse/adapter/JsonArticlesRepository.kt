@@ -35,7 +35,7 @@ class JsonArticlesRepository(
         try {
             Right(mapper.readValue(this))
         } catch (e: Exception) {
-            Left(ThrowableFailure(e))
+            Left(ArticlesDeserializationError(e))
         }
 
     private fun ArticlesDao.toDomain(): List<Article> =

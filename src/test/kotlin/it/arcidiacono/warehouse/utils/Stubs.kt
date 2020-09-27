@@ -4,9 +4,8 @@ import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import it.arcidiacono.warehouse.adapter.Datasource
+import it.arcidiacono.warehouse.domain.DatasourceError
 import it.arcidiacono.warehouse.domain.FailureReason
-import it.arcidiacono.warehouse.domain.ThrowableFailure
-import java.nio.charset.StandardCharsets
 
 val inMemoryDatasource: (String) -> Datasource =
     { filePath: String ->
@@ -16,9 +15,9 @@ val inMemoryDatasource: (String) -> Datasource =
             override fun read(): Either<FailureReason, String> {
                 if (content == "initial") {
                     try {
-                        content = FixtureLoader.readFile(filePath)
+                        content = javaClass.getResource(filePath).readText()
                     } catch (e: Exception) {
-                        Left(ThrowableFailure(e))
+                        Left(DatasourceError(e))
                     }
                 }
 
@@ -31,7 +30,3 @@ val inMemoryDatasource: (String) -> Datasource =
             }
         }
     }
-
-object FixtureLoader {
-    fun readFile(path: String): String = javaClass.getResource(path).readText(StandardCharsets.UTF_8)
-}

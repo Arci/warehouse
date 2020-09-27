@@ -104,7 +104,7 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(NoMatchingProductFound)
     }
 
     @Test
@@ -119,7 +119,7 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(ProductRepositoryError)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(ProductRepositoryError)
     }
 
     @Test
@@ -134,7 +134,7 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(NoMatchingProductFound)
     }
 
     @Test
@@ -149,6 +149,6 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(ArticleRepositoryError)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(ArticleRepositoryError)
     }
 }

@@ -34,7 +34,14 @@ class JsonArticlesRepositoryTest {
 
     @Test
     fun `when file does not exists`() {
-        jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("wathever"))
+        jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("whatever"))
+
+        assertTrue(jsonArticlesRepository.fetch().isLeft())
+    }
+
+    @Test
+    fun `when json is not valid`() {
+        jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("invalid.json"))
 
         assertTrue(jsonArticlesRepository.fetch().isLeft())
     }
@@ -50,19 +57,19 @@ class JsonArticlesRepositoryTest {
     fun `update happy path`() {
         jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("/articles/inventory.json"))
 
-        jsonArticlesRepository.update(
-            billOfMaterials = listOf(
-                Material(
-                    articleId = ArticleIdentificationNumber(1),
-                    requiredAmount = 1
-                ),
-                Material(
-                    articleId = ArticleIdentificationNumber(2),
-                    requiredAmount = 3
-                )
+        val billOfMaterials = listOf(
+            Material(
+                articleId = ArticleIdentificationNumber(1),
+                requiredAmount = 1
             ),
-            quantity = 2
-        ).shouldBeRight(Unit)
+            Material(
+                articleId = ArticleIdentificationNumber(2),
+                requiredAmount = 3
+            )
+        )
+        val quantity = 2
+
+        jsonArticlesRepository.update(billOfMaterials, quantity).shouldBeRight(Unit)
         jsonArticlesRepository.fetch().shouldBeRight(
             listOf(
                 Article(

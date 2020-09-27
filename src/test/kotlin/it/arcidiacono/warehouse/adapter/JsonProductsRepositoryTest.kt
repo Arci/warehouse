@@ -52,7 +52,14 @@ class JsonProductsRepositoryTest {
 
     @Test
     fun `when file does not exists`() {
-        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("wathever"))
+        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("whatever"))
+
+        assertTrue(jsonProductsRepository.fetch().isLeft())
+    }
+
+    @Test
+    fun `when json is not valid`() {
+        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("invalid.json"))
 
         assertTrue(jsonProductsRepository.fetch().isLeft())
     }

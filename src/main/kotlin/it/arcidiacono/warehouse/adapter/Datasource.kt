@@ -3,8 +3,8 @@ package it.arcidiacono.warehouse.adapter
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
+import it.arcidiacono.warehouse.domain.DatasourceError
 import it.arcidiacono.warehouse.domain.FailureReason
-import it.arcidiacono.warehouse.domain.ThrowableFailure
 import java.io.File
 import java.nio.charset.StandardCharsets
 
@@ -20,7 +20,7 @@ class FileDatasource(
         try {
             Right(readFile(filePath))
         } catch (e: Exception) {
-            Left(ThrowableFailure(e))
+            Left(DatasourceError(e))
         }
 
     override fun write(content: String): Either<FailureReason, Unit> =
@@ -28,7 +28,7 @@ class FileDatasource(
             writeToFile(filePath, content)
             Right(Unit)
         } catch (e: Exception) {
-            Left(ThrowableFailure(e))
+            Left(DatasourceError(e))
         }
 
     private fun writeToFile(path: String, content: String) = File(javaClass.getResource(path).file).writeText(content)
