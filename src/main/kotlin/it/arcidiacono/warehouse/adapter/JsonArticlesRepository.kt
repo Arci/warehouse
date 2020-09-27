@@ -27,17 +27,17 @@ class JsonArticlesRepository(
                 article.reduceAvailabilityBy(material.requiredAmount * quantity)
             }
 
-            articles.toRepresentation().writeAsJson()
+            writeAsJson(articles.toRepresentation())
         }
 
-    private fun String.asJson(): Either<FailureReason, ArticlesDao> =
+    private fun String.asJson(): Either<FailureReason, InventoryDao> =
         try {
             Right(mapper.readValue(this))
         } catch (e: Exception) {
             Left(ArticlesDeserializationError(e))
         }
 
-    private fun ArticlesDao.toDomain(): List<Article> =
+    private fun InventoryDao.toDomain(): List<Article> =
         this.inventory.map {
             Article(
                 id = ArticleIdentificationNumber(it.art_id),
@@ -46,8 +46,8 @@ class JsonArticlesRepository(
             )
         }
 
-    private fun List<Article>.toRepresentation(): ArticlesDao =
-        ArticlesDao(
+    private fun List<Article>.toRepresentation(): InventoryDao =
+        InventoryDao(
             inventory = this.map {
                 ArticleDao(
                     art_id = it.id.value,
@@ -57,16 +57,16 @@ class JsonArticlesRepository(
             }
         )
 
-    private fun ArticlesDao.writeAsJson(): Either<FailureReason, Unit> =
+    private fun writeAsJson(articleDao: InventoryDao): Either<FailureReason, Unit> =
         try {
-            val content = mapper.writeValueAsString(this)
+            val content = mapper.writeValueAsString(articleDao)
             datasource.write(content)
         } catch (e: Exception) {
             Left(ArticlesSerializationError(e))
         }
 }
 
-private data class ArticlesDao(
+private data class InventoryDao(
     val inventory: List<ArticleDao>
 )
 
