@@ -13,7 +13,7 @@ class SellProductUseCaseImpl(
 ) : SellProductUseCase {
     override fun execute(productName: String, quantity: Int): Either<FailureReason, Unit> =
         Either.applicative<FailureReason>().mapN(
-            productsRepository(),
+            productsRepository.fetch(),
             articlesRepository.fetch()
         ) { (products, articles) ->
             Pair(products, articles)
@@ -26,10 +26,7 @@ class SellProductUseCaseImpl(
                         if (quantity > sellableQuantity) {
                             Left(NotEnoughQuantity(sellableQuantity))
                         } else {
-                            product.billOfMaterials.forEach { material ->
-                                articlesRepository.update(material.articleId, material.requiredAmount * quantity)
-                            }
-
+                            articlesRepository.update(product.billOfMaterials, quantity)
                             Right(Unit)
                         }
                     }

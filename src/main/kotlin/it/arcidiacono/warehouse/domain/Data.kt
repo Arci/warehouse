@@ -1,14 +1,6 @@
 package it.arcidiacono.warehouse.domain
 
-import arrow.core.Either
 import java.math.BigDecimal
-
-typealias ProductsRepository = () -> Either<FailureReason, List<Product>>
-
-interface ArticlesRepository {
-    fun fetch(): Either<FailureReason, List<Article>>
-    fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit>
-}
 
 data class Product(
     val name: String,
@@ -33,8 +25,12 @@ data class Money(
 data class Article(
     val id: ArticleIdentificationNumber,
     val name: String,
-    val availableStock: Int
-)
+    var availableStock: Int
+) {
+    fun reduceAvailabilityBy(amount: Int) {
+        availableStock -= amount
+    }
+}
 
 inline class ArticleIdentificationNumber(val value: Long)
 

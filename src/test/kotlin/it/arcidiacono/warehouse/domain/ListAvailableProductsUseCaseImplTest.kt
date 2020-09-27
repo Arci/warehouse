@@ -78,11 +78,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `list available products with their quantities`() {
-        val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf(A_PRODUCT, ANOTHER_PRODUCT))
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE))
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
@@ -104,11 +106,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when a product is not available is not listed`() {
-        val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT)) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT))
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE))
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
@@ -125,11 +129,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when no product is available`() {
-        val productsRepository: ProductsRepository = { Right(listOf()) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
@@ -138,11 +144,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when product repository fails`() {
-        val productsRepository: ProductsRepository = { Left(ProductRepositoryError) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Left(ProductRepositoryError)
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
@@ -151,11 +159,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when no article is available`() {
-        val productsRepository: ProductsRepository = { Right(listOf()) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
@@ -164,11 +174,13 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when articles repository fails`() {
-        val productsRepository: ProductsRepository = { Right(listOf()) }
+        val productsRepository: ProductsRepository = object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
+        }
         val articlesRepository: ArticlesRepository = object : ArticlesRepository {
             override fun fetch(): Either<FailureReason, List<Article>> = Left(ArticleRepositoryError)
 
-            override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 

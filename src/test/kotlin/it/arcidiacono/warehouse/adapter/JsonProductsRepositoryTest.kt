@@ -5,21 +5,22 @@ import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
 import it.arcidiacono.warehouse.domain.Material
 import it.arcidiacono.warehouse.domain.Money
 import it.arcidiacono.warehouse.domain.Product
+import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
 private val A_PRICE = Money.euro(BigDecimal(42))
 
-class FileProductsRepositoryTest {
+class JsonProductsRepositoryTest {
 
-    private lateinit var fileProductsRepository: FileProductsRepository
+    private lateinit var jsonProductsRepository: JsonProductsRepository
 
     @Test
     fun `happy path`() {
-        fileProductsRepository = FileProductsRepository("/products/products.json")
+        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("/products/products.json"))
 
-        fileProductsRepository().shouldBeRight(
+        jsonProductsRepository.fetch().shouldBeRight(
             listOf(
                 Product(
                     name = "Dining Chair",
@@ -51,15 +52,15 @@ class FileProductsRepositoryTest {
 
     @Test
     fun `when file does not exists`() {
-        fileProductsRepository = FileProductsRepository("wathever")
+        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("wathever"))
 
-        assertTrue(fileProductsRepository().isLeft())
+        assertTrue(jsonProductsRepository.fetch().isLeft())
     }
 
     @Test
     fun `when no product specified`() {
-        fileProductsRepository = FileProductsRepository("/products/noProducts.json")
+        jsonProductsRepository = JsonProductsRepository(inMemoryDatasource("/products/noProducts.json"))
 
-        fileProductsRepository().shouldBeRight(emptyList())
+        jsonProductsRepository.fetch().shouldBeRight(emptyList())
     }
 }

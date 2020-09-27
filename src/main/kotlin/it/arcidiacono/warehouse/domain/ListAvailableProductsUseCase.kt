@@ -14,7 +14,7 @@ class ListAvailableProductsUseCaseImpl(
 ) : ListAvailableProductsUseCase {
     override fun execute(): Either<FailureReason, List<AvailableProduct>> =
         Either.applicative<FailureReason>().mapN(
-            productsRepository(),
+            productsRepository.fetch(),
             articlesRepository.fetch()
         ) { (products, articles) ->
             products.mapNotNull { product ->

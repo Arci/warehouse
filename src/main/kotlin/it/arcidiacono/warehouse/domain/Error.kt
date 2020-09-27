@@ -7,5 +7,6 @@ object ArticleRepositoryError : FailureReason()
 
 data class NotEnoughQuantity(val sellableQuantity: Int) : FailureReason()
 object NoMatchingProductFound : FailureReason()
+object NoMatchingArticleFound : FailureReason()
 
 data class ThrowableFailure(val throwable: Throwable) : FailureReason()
