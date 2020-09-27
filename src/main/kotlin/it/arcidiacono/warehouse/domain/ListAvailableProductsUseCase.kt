@@ -26,7 +26,11 @@ data class Product(
 data class Money(
     val currency: String,
     val amount: BigDecimal
-)
+) {
+    companion object {
+        fun euro(amount: BigDecimal) = Money("EUR", amount)
+    }
+}
 
 data class Article(
     val id: IdentificationNumber,

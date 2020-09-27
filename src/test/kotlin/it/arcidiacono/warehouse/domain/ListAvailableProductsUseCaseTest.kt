@@ -34,18 +34,12 @@ class ListAvailableProductsUseCaseTest {
                 listOf(
                     Product(
                         name = "aProduct",
-                        price = Money(
-                            currency = "EUR",
-                            amount = BigDecimal("42.00")
-                        ),
+                        price = Money.euro(BigDecimal("42.00")),
                         articles = listOf(AN_ARTICLE)
                     ),
                     Product(
                         name = "anotherProduct",
-                        price = Money(
-                            currency = "EUR",
-                            amount = BigDecimal("50.00")
-                        ),
+                        price = Money.euro(BigDecimal("50.00")),
                         articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
                     )
                 )
@@ -57,18 +51,12 @@ class ListAvailableProductsUseCaseTest {
             listOf(
                 Product(
                     name = "aProduct",
-                    price = Money(
-                        currency = "EUR",
-                        amount = BigDecimal("42.00")
-                    ),
+                    price = Money.euro(BigDecimal("42.00")),
                     articles = listOf(AN_ARTICLE)
                 ),
                 Product(
                     name = "anotherProduct",
-                    price = Money(
-                        currency = "EUR",
-                        amount = BigDecimal("50.00")
-                    ),
+                    price = Money.euro(BigDecimal("50.00")),
                     articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
                 )
             )
@@ -82,18 +70,12 @@ class ListAvailableProductsUseCaseTest {
                 listOf(
                     Product(
                         name = "aProduct",
-                        price = Money(
-                            currency = "EUR",
-                            amount = BigDecimal("42.00")
-                        ),
+                        price = Money.euro(BigDecimal("42.00")),
                         articles = listOf(AN_ARTICLE)
                     ),
                     Product(
                         name = "anotherProduct",
-                        price = Money(
-                            currency = "EUR",
-                            amount = BigDecimal("50.00")
-                        ),
+                        price = Money.euro(BigDecimal("50.00")),
                         articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)
                     )
                 )
@@ -105,10 +87,7 @@ class ListAvailableProductsUseCaseTest {
             listOf(
                 Product(
                     name = "aProduct",
-                    price = Money(
-                        currency = "EUR",
-                        amount = BigDecimal("42.00")
-                    ),
+                    price = Money.euro(BigDecimal("42.00")),
                     articles = listOf(AN_ARTICLE)
                 )
             )
