@@ -4,10 +4,10 @@ import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.adapter.JsonArticlesRepository
 import it.arcidiacono.warehouse.adapter.JsonProductsRepository
+import it.arcidiacono.warehouse.utils.Fixtures.A_PRICE
 import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 
 class WarehouseAcceptanceTest {
 
@@ -28,12 +28,12 @@ class WarehouseAcceptanceTest {
             listOf(
                 AvailableProduct(
                     name = "Dining Chair",
-                    price = Money.euro(BigDecimal(42)),
+                    price = A_PRICE,
                     availableQuantity = 2
                 ),
                 AvailableProduct(
                     name = "Dinning Table",
-                    price = Money.euro(BigDecimal(42)),
+                    price = A_PRICE,
                     availableQuantity = 1
                 )
             )
@@ -47,7 +47,7 @@ class WarehouseAcceptanceTest {
             listOf(
                 AvailableProduct(
                     name = "Dining Chair",
-                    price = Money.euro(BigDecimal(42)),
+                    price = A_PRICE,
                     availableQuantity = 1
                 )
             )

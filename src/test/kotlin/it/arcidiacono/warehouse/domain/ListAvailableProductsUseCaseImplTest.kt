@@ -4,74 +4,16 @@ import arrow.core.Left
 import arrow.core.Right
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
+import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_ARTICLE
+import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT
+import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_UNAVAILABLE_PRODUCT
+import it.arcidiacono.warehouse.utils.Fixtures.AN_ARTICLE
+import it.arcidiacono.warehouse.utils.Fixtures.AN_UNAVAILABLE_ARTICLE
+import it.arcidiacono.warehouse.utils.Fixtures.AN_UNAVAILABLE_PRODUCT
+import it.arcidiacono.warehouse.utils.Fixtures.A_PRODUCT
 import it.arcidiacono.warehouse.utils.stubArticlesRepositoryWith
 import it.arcidiacono.warehouse.utils.stubProductsRepositoryWith
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-
-private val AN_ARTICLE = Article(
-    id = ArticleIdentificationNumber(1),
-    name = "anArticle",
-    availableStock = 5
-)
-private val ANOTHER_ARTICLE = Article(
-    id = ArticleIdentificationNumber(2),
-    name = "anotherArticle",
-    availableStock = 10
-)
-private val AN_UNAVAILABLE_ARTICLE = Article(
-    id = ArticleIdentificationNumber(3),
-    name = "anUnavailableArticle",
-    availableStock = 0
-)
-private val A_PRODUCT = Product(
-    name = "aProduct",
-    price = Money.euro(BigDecimal("42.00")),
-    billOfMaterials = listOf(
-        Material(
-            articleId = AN_ARTICLE.id,
-            requiredAmount = 4
-        )
-    )
-)
-private val ANOTHER_PRODUCT = Product(
-    name = "anotherProduct",
-    price = Money.euro(BigDecimal("50.00")),
-    billOfMaterials = listOf(
-        Material(
-            articleId = AN_ARTICLE.id,
-            requiredAmount = 1
-        ),
-        Material(
-            articleId = ANOTHER_ARTICLE.id,
-            requiredAmount = 3
-        )
-    )
-)
-private val AN_UNAVAILABLE_PRODUCT = Product(
-    name = "anUnavailableProduct",
-    price = Money.euro(BigDecimal("36.00")),
-    billOfMaterials = listOf(
-        Material(
-            articleId = AN_ARTICLE.id,
-            requiredAmount = 4
-        ),
-        Material(
-            articleId = ANOTHER_ARTICLE.id,
-            requiredAmount = 12
-        )
-    )
-)
-private val ANOTHER_UNAVAILABLE_PRODUCT = Product(
-    name = "anotherUnavailableProduct",
-    price = Money.euro(BigDecimal("30.00")),
-    billOfMaterials = listOf(
-        Material(
-            articleId = AN_UNAVAILABLE_ARTICLE.id,
-            requiredAmount = 3
-        )
-    )
-)
 
 class ListAvailableProductsUseCaseImplTest {
 

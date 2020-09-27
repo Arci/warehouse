@@ -3,14 +3,11 @@ package it.arcidiacono.warehouse.adapter
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
 import it.arcidiacono.warehouse.domain.Material
-import it.arcidiacono.warehouse.domain.Money
 import it.arcidiacono.warehouse.domain.Product
+import it.arcidiacono.warehouse.utils.Fixtures.A_PRICE
 import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
-
-private val A_PRICE = Money.euro(BigDecimal(42))
 
 class JsonProductsRepositoryTest {
 
