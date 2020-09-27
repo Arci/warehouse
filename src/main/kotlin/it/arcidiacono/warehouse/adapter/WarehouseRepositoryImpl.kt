@@ -34,12 +34,11 @@ class WarehouseRepositoryImpl(
         }.fix()
 
     override fun sell(product: Product, quantity: Int): Either<FailureReason, Unit> {
-        product.billOfMaterials.map { material ->
+        val updatedArticles = product.billOfMaterials.map { material ->
             material.article.reduceAvailabilityBy(material.requiredAmount * quantity)
         }
 
-        val articles = product.billOfMaterials.map { it.article }
-        return articlesRepository.update(articles)
+        return articlesRepository.update(updatedArticles)
     }
 }
 

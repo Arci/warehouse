@@ -36,11 +36,9 @@ data class Material(
 data class Article(
     val id: ArticleIdentificationNumber,
     val name: String,
-    var availableStock: Int
+    val availableStock: Int
 ) {
-    fun reduceAvailabilityBy(amount: Int) {
-        availableStock -= amount
-    }
+    fun reduceAvailabilityBy(amount: Int): Article = this.copy(availableStock = this.availableStock - amount)
 }
 
 inline class ArticleIdentificationNumber(val value: Long)

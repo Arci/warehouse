@@ -1,10 +1,13 @@
 package it.arcidiacono.warehouse.adapter
 
+import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
+import it.arcidiacono.warehouse.domain.Article
 import it.arcidiacono.warehouse.domain.DatasourceError
+import it.arcidiacono.warehouse.domain.FailureReason
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_ARTICLE
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT_DTO
@@ -51,24 +54,24 @@ class WarehouseRepositoryImplTest {
         warehouseRepositoryImpl.fetch().shouldBeLeft(expectedError)
     }
 
-    // @Test
-    // fun `correctly updates articles on sell`() {
-    //     val productsRepository = stubProductsRepositoryWith(Right(emptyList()))
-    //     val articlesRepository = object : ArticlesRepository {
-    //         override fun fetch(): Either<FailureReason, List<Article>> = Right(emptyList())
-    //
-    //         override fun update(articles: List<Article>): Either<FailureReason, Unit> =
-    //             if (articles == listOf(AN_ARTICLE.copy(availableStock = 1))) {
-    //                 Right(Unit)
-    //             } else {
-    //                 Left(DatasourceError(RuntimeException("not the expected articles: $articles")))
-    //             }
-    //     }
-    //     warehouseRepositoryImpl = WarehouseRepositoryImpl(
-    //         productsRepository,
-    //         articlesRepository
-    //     )
-    //
-    //     warehouseRepositoryImpl.sell(A_PRODUCT, 1).shouldBeRight(Unit)
-    // }
+    @Test
+    fun `correctly updates articles on sell`() {
+        val productsRepository = stubProductsRepositoryWith(Right(emptyList()))
+        val articlesRepository = object : ArticlesRepository {
+            override fun fetch(): Either<FailureReason, List<Article>> = Right(emptyList())
+
+            override fun update(articles: List<Article>): Either<FailureReason, Unit> =
+                if (articles == listOf(AN_ARTICLE.copy(availableStock = 1))) {
+                    Right(Unit)
+                } else {
+                    Left(DatasourceError(RuntimeException("not the expected articles: $articles")))
+                }
+        }
+        warehouseRepositoryImpl = WarehouseRepositoryImpl(
+            productsRepository,
+            articlesRepository
+        )
+
+        warehouseRepositoryImpl.sell(A_PRODUCT, 1).shouldBeRight(Unit)
+    }
 }
