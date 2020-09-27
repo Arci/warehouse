@@ -18,8 +18,9 @@ class WarehouseAcceptanceTest {
     internal fun setUp() {
         val productsRepository = JsonProductsRepository(inMemoryDatasource("/data/products.json"))
         val articlesRepository = JsonArticlesRepository(inMemoryDatasource("/data/inventory.json"))
-        sellProductUseCase = SellProductUseCaseImpl(productsRepository, articlesRepository)
-        listAvailableProductsUseCase = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
+        val warehouseRepository = WarehouseRepositoryImpl(productsRepository, articlesRepository)
+        sellProductUseCase = SellProductUseCaseImpl(warehouseRepository)
+        listAvailableProductsUseCase = ListAvailableProductsUseCaseImpl(warehouseRepository)
     }
 
     @Test

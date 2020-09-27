@@ -4,7 +4,10 @@ import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import it.arcidiacono.warehouse.adapter.Datasource
-import it.arcidiacono.warehouse.domain.*
+import it.arcidiacono.warehouse.domain.DatasourceError
+import it.arcidiacono.warehouse.domain.FailureReason
+import it.arcidiacono.warehouse.domain.Product2
+import it.arcidiacono.warehouse.domain.WarehouseRepository
 
 val inMemoryDatasource: (String) -> Datasource =
     { filePath ->
@@ -30,18 +33,11 @@ val inMemoryDatasource: (String) -> Datasource =
         }
     }
 
-val stubProductsRepositoryWith: (Either<FailureReason, List<Product>>) -> ProductsRepository =
+val stubWarehouseRepositoryWith: (Either<FailureReason, List<Product2>>) -> WarehouseRepository =
     { result ->
-        object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = result
-        }
-    }
+        object : WarehouseRepository {
+            override fun fetch(): Either<FailureReason, List<Product2>> = result
 
-val stubArticlesRepositoryWith: (Either<FailureReason, List<Article>>) -> ArticlesRepository =
-    { result ->
-        object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = result
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun sell(product: Product2, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
         }
     }

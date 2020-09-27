@@ -3,7 +3,6 @@ package it.arcidiacono.warehouse.adapter
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.domain.Article
 import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
-import it.arcidiacono.warehouse.domain.Material
 import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -57,30 +56,25 @@ class JsonArticlesRepositoryTest {
     fun `update happy path`() {
         jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("/articles/inventory.json"))
 
-        val billOfMaterials = listOf(
-            Material(
-                articleId = ArticleIdentificationNumber(1),
-                requiredAmount = 1
-            ),
-            Material(
-                articleId = ArticleIdentificationNumber(2),
-                requiredAmount = 3
+        val toBeUpdated = listOf(
+            Article(
+                id = ArticleIdentificationNumber(1),
+                name = "leg",
+                availableStock = 6
             )
         )
-        val quantity = 2
-
-        jsonArticlesRepository.update(billOfMaterials, quantity).shouldBeRight(Unit)
+        jsonArticlesRepository.update(toBeUpdated).shouldBeRight(Unit)
         jsonArticlesRepository.fetch().shouldBeRight(
             listOf(
                 Article(
                     id = ArticleIdentificationNumber(1),
                     name = "leg",
-                    availableStock = 10
+                    availableStock = 6
                 ),
                 Article(
                     id = ArticleIdentificationNumber(2),
                     name = "screw",
-                    availableStock = 11
+                    availableStock = 17
                 )
             )
         )

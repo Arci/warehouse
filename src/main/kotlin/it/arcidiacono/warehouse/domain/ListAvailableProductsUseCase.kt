@@ -1,41 +1,22 @@
 package it.arcidiacono.warehouse.domain
 
 import arrow.core.Either
-import arrow.core.extensions.either.applicative.applicative
-import arrow.core.fix
 
 interface ListAvailableProductsUseCase {
     fun execute(): Either<FailureReason, List<AvailableProduct>>
 }
 
 class ListAvailableProductsUseCaseImpl(
-    private val productsRepository: ProductsRepository,
-    private val articlesRepository: ArticlesRepository
+    private val warehouseRepository: WarehouseRepository
 ) : ListAvailableProductsUseCase {
     override fun execute(): Either<FailureReason, List<AvailableProduct>> =
-        Either.applicative<FailureReason>().mapN(
-            productsRepository.fetch(),
-            articlesRepository.fetch()
-        ) { (products, articles) ->
-            products.mapNotNull { product ->
-                val sellableQuantity = sellableQuantityFor(product, articles)
-                if (sellableQuantity > 0) {
-                    AvailableProduct(
-                        name = product.name,
-                        price = product.price,
-                        availableQuantity = sellableQuantity
-                    )
-                } else {
-                    null
-                }
+        warehouseRepository.fetch().map { products ->
+            products.filter { it.sellableQuantity() > 0 }.map {
+                AvailableProduct(
+                    name = it.name,
+                    price = it.price,
+                    availableQuantity = it.sellableQuantity()
+                )
             }
-        }.fix()
-
-    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int =
-        product.billOfMaterials.map { material ->
-            val article = articles.find { it.id == material.articleId }!!
-            material.requiredAmount to article.availableStock
-        }.map { (requiredAmount, availableAmount) ->
-            availableAmount / requiredAmount
-        }.minOrNull()!!
+        }
 }

@@ -20,50 +20,50 @@ object Fixtures {
         name = "anUnavailableArticle",
         availableStock = 0
     )
-    val A_PRODUCT = Product(
+    val A_PRODUCT = Product2(
         name = "aProduct",
         price = A_PRICE,
         billOfMaterials = listOf(
-            Material(
-                articleId = AN_ARTICLE.id,
+            Material2(
+                article = AN_ARTICLE,
                 requiredAmount = 4
             )
         )
     )
-    val ANOTHER_PRODUCT = Product(
+    val ANOTHER_PRODUCT = Product2(
         name = "anotherProduct",
         price = A_PRICE,
         billOfMaterials = listOf(
-            Material(
-                articleId = AN_ARTICLE.id,
+            Material2(
+                article = AN_ARTICLE,
                 requiredAmount = 1
             ),
-            Material(
-                articleId = ANOTHER_ARTICLE.id,
+            Material2(
+                article = ANOTHER_ARTICLE,
                 requiredAmount = 3
             )
         )
     )
-    val AN_UNAVAILABLE_PRODUCT = Product(
+    val AN_UNAVAILABLE_PRODUCT = Product2(
         name = "anUnavailableProduct",
         price = A_PRICE,
         billOfMaterials = listOf(
-            Material(
-                articleId = AN_ARTICLE.id,
+            Material2(
+                article = AN_ARTICLE,
                 requiredAmount = 4
             ),
-            Material(
-                articleId = ANOTHER_ARTICLE.id,
+            Material2(
+                article = ANOTHER_ARTICLE,
                 requiredAmount = 12
             )
         )
     )
-    val ANOTHER_UNAVAILABLE_PRODUCT = Product(
+    val ANOTHER_UNAVAILABLE_PRODUCT = Product2(
         name = "anotherUnavailableProduct",
         price = A_PRICE,
         billOfMaterials = listOf(
-            Material(
-                articleId = AN_UNAVAILABLE_ARTICLE.id,
+            Material2(
+                article = AN_UNAVAILABLE_ARTICLE,
                 requiredAmount = 3
             )
         )

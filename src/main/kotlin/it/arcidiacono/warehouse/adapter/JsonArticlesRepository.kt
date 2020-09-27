@@ -20,14 +20,13 @@ class JsonArticlesRepository(
             }
         }
 
-    override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> =
-        fetch().flatMap { articles ->
-            billOfMaterials.forEach { material ->
-                val article = articles.find { it.id == material.articleId }!!
-                article.reduceAvailabilityBy(material.requiredAmount * quantity)
+    override fun update(articles: List<Article>): Either<FailureReason, Unit> =
+        fetch().flatMap { allArticles ->
+            val newList = allArticles.map { article ->
+                val find = articles.find { it.id == article.id }
+                find ?: article
             }
-
-            writeAsJson(articles.toRepresentation())
+            writeAsJson(newList.toRepresentation())
         }
 
     private fun String.asJson(): Either<FailureReason, InventoryDao> =

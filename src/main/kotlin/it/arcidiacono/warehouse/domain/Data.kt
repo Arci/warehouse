@@ -39,3 +39,19 @@ data class AvailableProduct(
     val price: Money,
     val availableQuantity: Int
 )
+
+data class Product2(
+    val name: String,
+    val price: Money,
+    val billOfMaterials: List<Material2>
+) {
+    fun sellableQuantity(): Int =
+        billOfMaterials.map { material ->
+            material.article.availableStock / material.requiredAmount
+        }.minOrNull()!!
+}
+
+data class Material2(
+    val article: Article,
+    val requiredAmount: Int
+)

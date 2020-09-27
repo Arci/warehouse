@@ -12,20 +12,22 @@ class WarehouseConfiguration {
 
     @Bean
     fun listAvailableProductsUseCase(
-        productsRepository: ProductsRepository,
-        articlesRepository: ArticlesRepository
+        warehouseRepository: WarehouseRepository
     ): ListAvailableProductsUseCase =
-        ListAvailableProductsUseCaseImpl(
-            productsRepository,
-            articlesRepository
-        )
+        ListAvailableProductsUseCaseImpl(warehouseRepository)
 
     @Bean
     fun sellProductUseCase(
+        warehouseRepository: WarehouseRepository
+    ): SellProductUseCase =
+        SellProductUseCaseImpl(warehouseRepository)
+
+    @Bean
+    fun warehouseRepository(
         productsRepository: ProductsRepository,
         articlesRepository: ArticlesRepository
-    ): SellProductUseCase =
-        SellProductUseCaseImpl(
+    ): WarehouseRepository =
+        WarehouseRepositoryImpl(
             productsRepository,
             articlesRepository
         )
