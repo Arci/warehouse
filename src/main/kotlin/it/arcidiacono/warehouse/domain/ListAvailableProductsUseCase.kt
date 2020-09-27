@@ -28,10 +28,12 @@ class ListAvailableProductsUseCase(
             }
         }.fix()
 
-    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int {
-        val largestMaterial = product.billOfMaterials.maxByOrNull { material -> material.requiredAmount }!!
-        val article = articles.find { it.id == largestMaterial.articleId }!!
-        return article.availableStock / largestMaterial.requiredAmount
-    }
+    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int =
+        product.billOfMaterials.map { material ->
+            val article = articles.find { it.id == material.articleId }!!
+            material.requiredAmount to article.availableStock
+        }.map { (requiredAmount, availableAmount) ->
+            availableAmount / requiredAmount
+        }.minOrNull()!!
 }
 
