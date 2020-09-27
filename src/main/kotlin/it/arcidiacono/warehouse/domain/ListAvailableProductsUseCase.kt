@@ -18,12 +18,12 @@ class ListAvailableProductsUseCase(
             articlesRepository()
         ) { (products, articles) ->
             products.mapNotNull { product ->
-                val availableFor = availableFor(product, articles)
-                if (availableFor > 0) {
+                val sellableQuantity = sellableQuantityFor(product, articles)
+                if (sellableQuantity > 0) {
                     AvailableProduct(
-                        product.name,
-                        product.price,
-                        availableFor
+                        name = product.name,
+                        price = product.price,
+                        availableQuantity = sellableQuantity
                     )
                 } else {
                     null
@@ -31,17 +31,9 @@ class ListAvailableProductsUseCase(
             }
         }.fix()
 
-    private fun availableFor(product: Product, articles: List<Article>): Int {
-        val map = product.billOfMaterials.map { material ->
-            val article = articles.find { it.id == material.articleId }!!
-
-            material.requiredAmount to article.availableStock
-        }
-
-        val map1 = map.map { (requiredAmount, availableAmount) ->
-            availableAmount / requiredAmount
-        }
-
-        return map1.minOrNull()!!
+    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int {
+        val largestMaterial = product.billOfMaterials.maxByOrNull { material -> material.requiredAmount }!!
+        val article = articles.find { it.id == largestMaterial.articleId }!!
+        return article.availableStock / largestMaterial.requiredAmount
     }
 }
