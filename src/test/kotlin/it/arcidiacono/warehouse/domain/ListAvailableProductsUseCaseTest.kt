@@ -4,7 +4,6 @@ import arrow.core.Left
 import arrow.core.Right
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -77,7 +76,6 @@ class ListAvailableProductsUseCaseTest {
     private lateinit var listAvailableProductsUseCase: ListAvailableProductsUseCase
 
     @Test
-    @Disabled
     fun `list available products with their quantities`() {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
@@ -101,7 +99,6 @@ class ListAvailableProductsUseCaseTest {
     }
 
     @Test
-    @Disabled
     fun `when a product is not available is not listed`() {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)) }
