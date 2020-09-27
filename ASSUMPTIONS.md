@@ -13,6 +13,10 @@ The text states that every product has a price but is not specified in the JSON 
 For simplicity, I'm assuming all the products cost the same amount (that is hardcoded in the code during adapting). 
 This behaviour can be easily altered by specifying the amounts in the JSON or by fetching this information from another repository.
 
+## Products repository
+
+To avoid maintaining the state of the application just in memory after the initial load of the articles and the products, I've decided to update the original article file whenever a product is sell.
+
 ## Query available products
 
 System will be queried via REST APIs, for listing available products I've created the following one:
