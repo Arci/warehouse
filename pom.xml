@@ -102,6 +102,7 @@
                 <configuration>
                     <args>
                         <arg>-Xjsr305=strict</arg>
+                        <arg>-Xinline-classes</arg>
                     </args>
                     <compilerPlugins>
                         <plugin>spring</plugin>
