@@ -8,6 +8,11 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import it.arcidiacono.warehouse.domain.*
 
+interface ArticlesRepository {
+    fun fetch(): Either<FailureReason, List<Article>>
+    fun update(articles: List<Article>): Either<FailureReason, Unit>
+}
+
 class JsonArticlesRepository(
     private val datasource: Datasource
 ) : ArticlesRepository {
@@ -22,11 +27,11 @@ class JsonArticlesRepository(
 
     override fun update(articles: List<Article>): Either<FailureReason, Unit> =
         fetch().flatMap { allArticles ->
-            val newList = allArticles.map { article ->
-                val find = articles.find { it.id == article.id }
-                find ?: article
+            val updatedArticles = allArticles.map { oldArticle ->
+                val newArticle = articles.find { it.id == oldArticle.id }
+                newArticle ?: oldArticle
             }
-            writeAsJson(newList.toRepresentation())
+            writeAsJson(updatedArticles.toRepresentation())
         }
 
     private fun String.asJson(): Either<FailureReason, InventoryDao> =
@@ -74,4 +79,3 @@ private data class ArticleDao(
     val name: String,
     val stock: Int
 )
-

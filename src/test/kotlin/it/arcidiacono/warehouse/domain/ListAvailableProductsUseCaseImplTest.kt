@@ -8,7 +8,7 @@ import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_UNAVAILABLE_PRODUCT
 import it.arcidiacono.warehouse.utils.Fixtures.AN_UNAVAILABLE_PRODUCT
 import it.arcidiacono.warehouse.utils.Fixtures.A_PRODUCT
-import it.arcidiacono.warehouse.utils.stubWarehouseRepositoryWith
+import it.arcidiacono.warehouse.utils.stubWarehouseRepositoryFetchWith
 import org.junit.jupiter.api.Test
 
 class ListAvailableProductsUseCaseImplTest {
@@ -17,7 +17,7 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `list available products with their quantities`() {
-        val warehouseRepository = stubWarehouseRepositoryWith(Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)))
+        val warehouseRepository = stubWarehouseRepositoryFetchWith(Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(warehouseRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(
@@ -38,7 +38,7 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when a product is not available is not listed`() {
-        val warehouseRepository = stubWarehouseRepositoryWith(
+        val warehouseRepository = stubWarehouseRepositoryFetchWith(
             Right(
                 listOf(
                     A_PRODUCT,
@@ -62,7 +62,7 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when no product is available`() {
-        val warehouseRepository = stubWarehouseRepositoryWith(Right(listOf()))
+        val warehouseRepository = stubWarehouseRepositoryFetchWith(Right(listOf()))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(warehouseRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(listOf())
@@ -70,9 +70,10 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when warehouse repository fails`() {
-        val warehouseRepository = stubWarehouseRepositoryWith(Left(ProductRepositoryError))
+        val expectedError = DatasourceError(RuntimeException("something failed :("))
+        val warehouseRepository = stubWarehouseRepositoryFetchWith(Left(expectedError))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(warehouseRepository)
 
-        listAvailableProductsUseCaseImpl.execute().shouldBeLeft(ProductRepositoryError)
+        listAvailableProductsUseCaseImpl.execute().shouldBeLeft(expectedError)
     }
 }

@@ -4,6 +4,7 @@ import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.adapter.JsonArticlesRepository
 import it.arcidiacono.warehouse.adapter.JsonProductsRepository
+import it.arcidiacono.warehouse.adapter.WarehouseRepositoryImpl
 import it.arcidiacono.warehouse.utils.Fixtures.A_PRICE
 import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.BeforeEach
@@ -15,7 +16,7 @@ class WarehouseAcceptanceTest {
     private lateinit var sellProductUseCase: SellProductUseCase
 
     @BeforeEach
-    internal fun setUp() {
+    fun setUp() {
         val productsRepository = JsonProductsRepository(inMemoryDatasource("/data/products.json"))
         val articlesRepository = JsonArticlesRepository(inMemoryDatasource("/data/inventory.json"))
         val warehouseRepository = WarehouseRepositoryImpl(productsRepository, articlesRepository)

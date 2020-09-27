@@ -3,11 +3,11 @@ package it.arcidiacono.warehouse.utils
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
+import it.arcidiacono.warehouse.adapter.ArticlesRepository
 import it.arcidiacono.warehouse.adapter.Datasource
-import it.arcidiacono.warehouse.domain.DatasourceError
-import it.arcidiacono.warehouse.domain.FailureReason
-import it.arcidiacono.warehouse.domain.Product2
-import it.arcidiacono.warehouse.domain.WarehouseRepository
+import it.arcidiacono.warehouse.adapter.ProductDto
+import it.arcidiacono.warehouse.adapter.ProductsRepository
+import it.arcidiacono.warehouse.domain.*
 
 val inMemoryDatasource: (String) -> Datasource =
     { filePath ->
@@ -33,11 +33,27 @@ val inMemoryDatasource: (String) -> Datasource =
         }
     }
 
-val stubWarehouseRepositoryWith: (Either<FailureReason, List<Product2>>) -> WarehouseRepository =
+val stubWarehouseRepositoryFetchWith: (Either<FailureReason, List<Product>>) -> WarehouseRepository =
     { result ->
         object : WarehouseRepository {
-            override fun fetch(): Either<FailureReason, List<Product2>> = result
+            override fun fetch(): Either<FailureReason, List<Product>> = result
 
-            override fun sell(product: Product2, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun sell(product: Product, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+        }
+    }
+
+val stubProductsRepositoryWith: (Either<FailureReason, List<ProductDto>>) -> ProductsRepository =
+    { result ->
+        object : ProductsRepository {
+            override fun fetch(): Either<FailureReason, List<ProductDto>> = result
+        }
+    }
+
+val stubArticlesRepositoryWith: (Either<FailureReason, List<Article>>) -> ArticlesRepository =
+    { result ->
+        object : ArticlesRepository {
+            override fun fetch(): Either<FailureReason, List<Article>> = result
+
+            override fun update(articles: List<Article>): Either<FailureReason, Unit> = Right(Unit)
         }
     }

@@ -88,3 +88,4 @@ response will be 204 (`NO_CONTENT`) when sell succeeds, for simplicity all error
 ## Missing tests
 
 - I haven't created the tests for `ListAvailableProductsEndpoint` and `SellProductEndpoint` since they require a bit of spring boilerplate, what should be verified is the contract that the API is declaring
+- I haven't created a test for `FileDatasource` for time convenience since is a wrapper of some file utils

@@ -1,8 +1,6 @@
 package it.arcidiacono.warehouse
 
-import it.arcidiacono.warehouse.adapter.FileDatasource
-import it.arcidiacono.warehouse.adapter.JsonArticlesRepository
-import it.arcidiacono.warehouse.adapter.JsonProductsRepository
+import it.arcidiacono.warehouse.adapter.*
 import it.arcidiacono.warehouse.domain.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

@@ -2,8 +2,6 @@ package it.arcidiacono.warehouse.adapter
 
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
-import it.arcidiacono.warehouse.domain.Material
-import it.arcidiacono.warehouse.domain.Product
 import it.arcidiacono.warehouse.utils.Fixtures.A_PRICE
 import it.arcidiacono.warehouse.utils.inMemoryDatasource
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -19,25 +17,25 @@ class JsonProductsRepositoryTest {
 
         jsonProductsRepository.fetch().shouldBeRight(
             listOf(
-                Product(
+                ProductDto(
                     name = "Dining Chair",
                     price = A_PRICE,
                     billOfMaterials = listOf(
-                        Material(
+                        MaterialDto(
                             articleId = ArticleIdentificationNumber(1),
                             requiredAmount = 4
                         ),
-                        Material(
+                        MaterialDto(
                             articleId = ArticleIdentificationNumber(2),
                             requiredAmount = 8
                         )
                     )
                 ),
-                Product(
+                ProductDto(
                     name = "Dinning Table",
                     price = A_PRICE,
                     billOfMaterials = listOf(
-                        Material(
+                        MaterialDto(
                             articleId = ArticleIdentificationNumber(1),
                             requiredAmount = 4
                         )

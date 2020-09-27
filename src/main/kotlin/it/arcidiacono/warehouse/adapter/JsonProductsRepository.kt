@@ -6,15 +6,33 @@ import arrow.core.Right
 import arrow.core.flatMap
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import it.arcidiacono.warehouse.domain.*
+import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
+import it.arcidiacono.warehouse.domain.FailureReason
+import it.arcidiacono.warehouse.domain.Money
+import it.arcidiacono.warehouse.domain.ProductsDeserializationError
 import java.math.BigDecimal
+
+interface ProductsRepository {
+    fun fetch(): Either<FailureReason, List<ProductDto>>
+}
+
+data class ProductDto(
+    val name: String,
+    val price: Money,
+    val billOfMaterials: List<MaterialDto>
+)
+
+data class MaterialDto(
+    val articleId: ArticleIdentificationNumber,
+    val requiredAmount: Int
+)
 
 class JsonProductsRepository(
     private val datasource: Datasource
 ) : ProductsRepository {
     private val mapper = jacksonObjectMapper()
 
-    override fun fetch(): Either<FailureReason, List<Product>> =
+    override fun fetch(): Either<FailureReason, List<ProductDto>> =
         datasource.read().flatMap {
             it.asJson().map { productsDao ->
                 productsDao.toDomain()
@@ -28,13 +46,13 @@ class JsonProductsRepository(
             Left(ProductsDeserializationError(e))
         }
 
-    private fun ProductsDao.toDomain(): List<Product> =
+    private fun ProductsDao.toDomain(): List<ProductDto> =
         this.products.map { productDao ->
-            Product(
+            ProductDto(
                 name = productDao.name,
                 price = Money.euro(BigDecimal(42)),
                 billOfMaterials = productDao.contain_articles.map { materialDao ->
-                    Material(
+                    MaterialDto(
                         articleId = ArticleIdentificationNumber(materialDao.art_id),
                         requiredAmount = materialDao.amount_of
                     )
