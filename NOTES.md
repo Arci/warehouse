@@ -17,9 +17,14 @@ This behaviour can be easily altered by specifying the amounts in the JSON or by
 
 To avoid maintaining the state of the application just in memory after the initial load of the articles and the products, I've decided to update the `inventory.json` file whenever a product is sold.
 
-## Query available products
+## Interact with the system
 
-System will be queried via REST APIs, for listing available products I've created the following one:
+System will be queried via REST APIs
+
+
+# APIs
+
+## List available products
 
 ```
 GET http://localhost:8081/warehouse/products/available
@@ -69,3 +74,9 @@ with the following body:
 ```
 
 response will be 204 (`NO_CONTENT`) when sell succeeds, for simplicity all errors are translated into 500s.
+
+# Further improvements
+
+## Missing tests
+
+- I haven't created the tests for `ListAvailableProductsEndpoint` and `SellProductEndpoint` since they require a bit of spring boilerplate, what should be verified is the contract that the API is declaring

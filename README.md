@@ -11,6 +11,6 @@ The warehouse should have at least the following functionality:
 - Get all products and quantity of each that is an available with the current inventory
 - Remove(Sell) a product and update the inventory accordingly
 
-# Assumptions
+# Notes
 
-see [ASSUMPTIONS.md](./ASSUMPTIONS.md)
+during the development I've made several decisions that I've collected in [NOTES.md](./NOTES.md)

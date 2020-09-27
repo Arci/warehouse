@@ -18,7 +18,7 @@ class FileDatasource(
 ) : Datasource {
     override fun read(): Either<FailureReason, String> =
         try {
-            Right(readFile(filePath))
+            Right(readFromFile(filePath))
         } catch (e: Exception) {
             Left(DatasourceError(e))
         }
@@ -32,5 +32,5 @@ class FileDatasource(
         }
 
     private fun writeToFile(path: String, content: String) = File(javaClass.getResource(path).file).writeText(content)
-    private fun readFile(path: String): String = javaClass.getResource(path).readText(StandardCharsets.UTF_8)
+    private fun readFromFile(path: String): String = javaClass.getResource(path).readText(StandardCharsets.UTF_8)
 }
