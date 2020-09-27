@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
+private val A_PRICE = Money.euro(BigDecimal(42))
+
 class FileProductsRepositoryTest {
 
     private lateinit var fileProductsRepository: FileProductsRepository
@@ -21,7 +23,7 @@ class FileProductsRepositoryTest {
             listOf(
                 Product(
                     name = "Dining Chair",
-                    price = Money.euro(BigDecimal("12")),
+                    price = A_PRICE,
                     billOfMaterials = listOf(
                         Material(
                             articleId = ArticleIdentificationNumber(1),
@@ -35,7 +37,7 @@ class FileProductsRepositoryTest {
                 ),
                 Product(
                     name = "Dinning Table",
-                    price = Money.euro(BigDecimal("12")),
+                    price = A_PRICE,
                     billOfMaterials = listOf(
                         Material(
                             articleId = ArticleIdentificationNumber(1),

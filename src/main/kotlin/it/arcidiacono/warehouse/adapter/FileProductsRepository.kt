@@ -26,7 +26,7 @@ class FileProductsRepository(
         this.products.map { productDao ->
             Product(
                 name = productDao.name,
-                price = Money.euro(BigDecimal("12")), // TODO
+                price = Money.euro(BigDecimal(42)),
                 billOfMaterials = productDao.contain_articles.map { materialDao ->
                     Material(
                         articleId = ArticleIdentificationNumber(materialDao.art_id),
