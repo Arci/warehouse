@@ -23,7 +23,7 @@ class ListAvailableProductsUseCaseTest {
                         ),
                         articles = listOf(
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(1),
                                 name = "anArticle",
                                 availableStock = 10
                             )
@@ -37,12 +37,12 @@ class ListAvailableProductsUseCaseTest {
                         ),
                         articles = listOf(
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(2),
                                 name = "anArticle",
                                 availableStock = 10
                             ),
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(3),
                                 name = "anotherArticle",
                                 availableStock = 10
                             )
@@ -63,7 +63,7 @@ class ListAvailableProductsUseCaseTest {
                     ),
                     articles = listOf(
                         Article(
-                            identificationNumber = 1,
+                            id = IdentificationNumber(1),
                             name = "anArticle",
                             availableStock = 10
                         )
@@ -77,12 +77,12 @@ class ListAvailableProductsUseCaseTest {
                     ),
                     articles = listOf(
                         Article(
-                            identificationNumber = 1,
+                            id = IdentificationNumber(2),
                             name = "anArticle",
                             availableStock = 10
                         ),
                         Article(
-                            identificationNumber = 1,
+                            id = IdentificationNumber(3),
                             name = "anotherArticle",
                             availableStock = 10
                         )
@@ -105,7 +105,7 @@ class ListAvailableProductsUseCaseTest {
                         ),
                         articles = listOf(
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(1),
                                 name = "anArticle",
                                 availableStock = 10
                             )
@@ -119,12 +119,12 @@ class ListAvailableProductsUseCaseTest {
                         ),
                         articles = listOf(
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(2),
                                 name = "anArticle",
                                 availableStock = 10
                             ),
                             Article(
-                                identificationNumber = 1,
+                                id = IdentificationNumber(3),
                                 name = "anUnavailableItem",
                                 availableStock = 0
                             )
@@ -145,7 +145,7 @@ class ListAvailableProductsUseCaseTest {
                     ),
                     articles = listOf(
                         Article(
-                            identificationNumber = 1,
+                            id = IdentificationNumber(1),
                             name = "anArticle",
                             availableStock = 10
                         )
