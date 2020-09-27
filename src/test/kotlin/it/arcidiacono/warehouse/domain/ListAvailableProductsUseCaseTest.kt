@@ -93,9 +93,66 @@ class ListAvailableProductsUseCaseTest {
     }
 
     @Test
-    @Disabled
     fun `when a product is not available is not listed`() {
-        TODO("Not yet implemented")
+        val productsRepository: ProductsRepository = {
+            Right(
+                listOf(
+                    Product(
+                        name = "aProduct",
+                        price = Money(
+                            currency = "EUR",
+                            amount = BigDecimal("42.00")
+                        ),
+                        articles = listOf(
+                            Article(
+                                identificationNumber = 1,
+                                name = "anArticle",
+                                availableStock = 10
+                            )
+                        )
+                    ),
+                    Product(
+                        name = "anotherProduct",
+                        price = Money(
+                            currency = "EUR",
+                            amount = BigDecimal("50.00")
+                        ),
+                        articles = listOf(
+                            Article(
+                                identificationNumber = 1,
+                                name = "anArticle",
+                                availableStock = 10
+                            ),
+                            Article(
+                                identificationNumber = 1,
+                                name = "anUnavailableItem",
+                                availableStock = 0
+                            )
+                        )
+                    )
+                )
+            )
+        }
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+
+        listAvailableProductsUseCase().shouldBeRight(
+            listOf(
+                Product(
+                    name = "aProduct",
+                    price = Money(
+                        currency = "EUR",
+                        amount = BigDecimal("42.00")
+                    ),
+                    articles = listOf(
+                        Article(
+                            identificationNumber = 1,
+                            name = "anArticle",
+                            availableStock = 10
+                        )
+                    )
+                )
+            )
+        )
     }
 
     @Test
