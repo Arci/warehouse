@@ -74,7 +74,9 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("aNonExistingProduct", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("aNonExistingProduct", 1).shouldBeLeft(
+            NoMatchingProductFound("aNonExistingProduct")
+        )
     }
 
     @Test
@@ -104,7 +106,9 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(
+            NoMatchingProductFound("whatever")
+        )
     }
 
     @Test
@@ -134,7 +138,9 @@ class SellProductUseCaseImplTest {
         }
         sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository)
 
-        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("whatever", 1).shouldBeLeft(
+            NoMatchingProductFound("whatever")
+        )
     }
 
     @Test

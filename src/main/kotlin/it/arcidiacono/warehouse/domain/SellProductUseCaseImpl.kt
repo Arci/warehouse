@@ -20,7 +20,7 @@ class SellProductUseCaseImpl(
         }.flatMap { (products, articles) ->
             products.find { it.name == productName }.toOption()
                 .fold(
-                    { Left(NoMatchingProductFound) },
+                    { Left(NoMatchingProductFound(productName)) },
                     { product ->
                         val sellableQuantity = sellableQuantityFor(product, articles)
                         if (quantity > sellableQuantity) {
