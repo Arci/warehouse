@@ -27,8 +27,7 @@ class JsonArticlesRepository(
                 article.reduceAvailabilityBy(material.requiredAmount * quantity)
             }
 
-            val fileContent = mapper.writeValueAsString(articles.toRepresentation())
-            datasource.write(fileContent)
+            articles.toRepresentation().writeAsJson()
         }
 
     private fun String.asJson(): Either<FailureReason, ArticlesDao> =
@@ -57,6 +56,14 @@ class JsonArticlesRepository(
                 )
             }
         )
+
+    private fun ArticlesDao.writeAsJson(): Either<FailureReason, Unit> =
+        try {
+            val content = mapper.writeValueAsString(this)
+            datasource.write(content)
+        } catch (e: Exception) {
+            Left(ArticlesSerializationError(e))
+        }
 }
 
 private data class ArticlesDao(

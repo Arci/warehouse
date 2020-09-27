@@ -11,4 +11,5 @@ object NoMatchingArticleFound : FailureReason()
 
 data class ProductsDeserializationError(val throwable: Throwable) : FailureReason()
 data class ArticlesDeserializationError(val throwable: Throwable) : FailureReason()
+data class ArticlesSerializationError(val throwable: Throwable) : FailureReason()
 data class DatasourceError(val throwable: Throwable) : FailureReason()
