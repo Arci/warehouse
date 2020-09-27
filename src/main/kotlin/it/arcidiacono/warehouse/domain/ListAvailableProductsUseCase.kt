@@ -39,4 +39,3 @@ class ListAvailableProductsUseCaseImpl(
             availableAmount / requiredAmount
         }.minOrNull()!!
 }
-

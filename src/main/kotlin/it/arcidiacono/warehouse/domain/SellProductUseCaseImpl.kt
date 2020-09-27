@@ -3,15 +3,18 @@ package it.arcidiacono.warehouse.domain
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 
-typealias SellProduct = (productName: String, quantity: Int) -> Either<FailureReason, Unit>
 typealias UpdateArticles = (id: ArticleIdentificationNumber, quantity: Int) -> Either<FailureReason, Unit>
 
-class SellProductUseCase(
+interface SellProductUseCase {
+    fun execute(productName: String, quantity: Int): Either<FailureReason, Unit>
+}
+
+class SellProductUseCaseImpl(
     private val productsRepository: ProductsRepository,
     private val articlesRepository: ArticlesRepository,
     private val updateArticles: UpdateArticles
-) : SellProduct {
-    override fun invoke(productName: String, quantity: Int): Either<FailureReason, Unit> =
+) : SellProductUseCase {
+    override fun execute(productName: String, quantity: Int): Either<FailureReason, Unit> =
         Either.applicative<FailureReason>().mapN(
             productsRepository(),
             articlesRepository()
@@ -36,9 +39,11 @@ class SellProductUseCase(
                 )
         }
 
-    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int {
-        val largestMaterial = product.billOfMaterials.maxByOrNull { material -> material.requiredAmount }!!
-        val article = articles.find { it.id == largestMaterial.articleId }!!
-        return article.availableStock / largestMaterial.requiredAmount
-    }
+    private fun sellableQuantityFor(product: Product, articles: List<Article>): Int =
+        product.billOfMaterials.map { material ->
+            val article = articles.find { it.id == material.articleId }!!
+            material.requiredAmount to article.availableStock
+        }.map { (requiredAmount, availableAmount) ->
+            availableAmount / requiredAmount
+        }.minOrNull()!!
 }

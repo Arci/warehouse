@@ -42,19 +42,18 @@ private val ANOTHER_PRODUCT = Product(
     )
 )
 
-class SellProductUseCaseTest {
+class SellProductUseCaseImplTest {
 
-    private lateinit var sellProductsUseCase: SellProductUseCase
+    private lateinit var sellProductsUseCaseImpl: SellProductUseCaseImpl
 
     @Test
     fun `happy path`() {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("aProduct", 1).shouldBeRight()
+        sellProductsUseCaseImpl.execute("aProduct", 1).shouldBeRight()
     }
 
     @Test
@@ -62,10 +61,9 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("aNonExistingProduct", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("aNonExistingProduct", 1).shouldBeLeft(NoMatchingProductFound)
     }
 
     @Test
@@ -73,10 +71,9 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("aProduct", 4).shouldBeLeft(NotEnoughQuantity(1))
+        sellProductsUseCaseImpl.execute("aProduct", 4).shouldBeLeft(NotEnoughQuantity(1))
     }
 
     @Test
@@ -84,10 +81,9 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("wathever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(NoMatchingProductFound)
     }
 
     @Test
@@ -95,10 +91,9 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Left(ProductRepositoryError) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("wathever", 1).shouldBeLeft(ProductRepositoryError)
+        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(ProductRepositoryError)
     }
 
     @Test
@@ -106,10 +101,9 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("wathever", 1).shouldBeLeft(NoMatchingProductFound)
+        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(NoMatchingProductFound)
     }
 
     @Test
@@ -117,9 +111,8 @@ class SellProductUseCaseTest {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Left(ArticleRepositoryError) }
         val updateArticles: UpdateArticles = { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+        sellProductsUseCaseImpl = SellProductUseCaseImpl(productsRepository, articlesRepository, updateArticles)
 
-        sellProductsUseCase = SellProductUseCase(productsRepository, articlesRepository, updateArticles)
-
-        sellProductsUseCase("wathever", 1).shouldBeLeft(ArticleRepositoryError)
+        sellProductsUseCaseImpl.execute("wathever", 1).shouldBeLeft(ArticleRepositoryError)
     }
 }

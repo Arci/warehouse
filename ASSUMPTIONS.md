@@ -43,3 +43,25 @@ example of 200 response:
     }
 ]
 ``` 
+
+For simplicity all errors gets translated into 500s.
+
+## Sell a product
+
+Products can be sold by hitting the following REST API:
+
+```
+POST http://localhost:8081/warehouse/products/sell
+```
+
+with the following body:
+
+```json
+
+{
+  "name": "Dinning Table",
+  "quantity": 1
+}
+```
+
+response will be 204 (`NO_CONTENT`) when sell succeeds, for simplicity all errors are translated into 500s.
