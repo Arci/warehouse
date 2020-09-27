@@ -1,11 +1,15 @@
 package it.arcidiacono.warehouse.domain
 
-import java.math.BigDecimal
 import arrow.core.Either
+import java.math.BigDecimal
+import java.util.*
 
 typealias ListAvailableProducts = () -> Either<FailureReason, List<Product>>
+typealias ProductsRepository = () -> Either<FailureReason, List<Product>>
 
-class ListAvailableProductsUseCase : ListAvailableProducts {
+class ListAvailableProductsUseCase(
+    private val productsRepository: ProductsRepository
+) : ListAvailableProducts {
     override fun invoke(): Either<FailureReason, List<Product>> {
         TODO("Not yet implemented")
     }
@@ -13,11 +17,16 @@ class ListAvailableProductsUseCase : ListAvailableProducts {
 
 data class Product(
     val name: String,
-    val price: BigDecimal,
-    val articles: List<Articles>
+    val price: Money,
+    val articles: List<Article>
 )
 
-class Articles(
+data class Money(
+    val currency: String,
+    val amount: BigDecimal
+)
+
+class Article(
     val identificationNumber: Number,
     val name: String,
     val availableStock: Number
