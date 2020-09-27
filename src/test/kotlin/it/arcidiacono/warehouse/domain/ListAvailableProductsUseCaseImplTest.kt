@@ -1,10 +1,11 @@
 package it.arcidiacono.warehouse.domain
 
-import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
+import it.arcidiacono.warehouse.utils.stubArticlesRepositoryWith
+import it.arcidiacono.warehouse.utils.stubProductsRepositoryWith
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -78,14 +79,8 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `list available products with their quantities`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf(A_PRODUCT, ANOTHER_PRODUCT))
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE))
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)))
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(
@@ -106,14 +101,24 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when a product is not available is not listed`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT))
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE))
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(
+            Right(
+                listOf(
+                    A_PRODUCT,
+                    AN_UNAVAILABLE_PRODUCT,
+                    ANOTHER_UNAVAILABLE_PRODUCT
+                )
+            )
+        )
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(
+            Right(
+                listOf(
+                    AN_ARTICLE,
+                    ANOTHER_ARTICLE,
+                    AN_UNAVAILABLE_ARTICLE
+                )
+            )
+        )
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(
@@ -129,14 +134,8 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when no product is available`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(Right(listOf()))
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(Right(listOf()))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(listOf())
@@ -144,14 +143,8 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when product repository fails`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Left(ProductRepositoryError)
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(Left(ProductRepositoryError))
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(Right(listOf()))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeLeft(ProductRepositoryError)
@@ -159,14 +152,8 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when no article is available`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(listOf())
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(Right(listOf()))
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(Right(listOf()))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeRight(listOf())
@@ -174,14 +161,8 @@ class ListAvailableProductsUseCaseImplTest {
 
     @Test
     fun `when articles repository fails`() {
-        val productsRepository: ProductsRepository = object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = Right(listOf())
-        }
-        val articlesRepository: ArticlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Left(ArticleRepositoryError)
-
-            override fun update(billOfMaterials: List<Material>, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
-        }
+        val productsRepository: ProductsRepository = stubProductsRepositoryWith(Right(listOf()))
+        val articlesRepository: ArticlesRepository = stubArticlesRepositoryWith(Left(ArticleRepositoryError))
         listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
         listAvailableProductsUseCaseImpl.execute().shouldBeLeft(ArticleRepositoryError)
