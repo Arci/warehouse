@@ -15,7 +15,7 @@ This behaviour can be easily altered by specifying the amounts in the JSON or by
 
 ## Products repository
 
-To avoid maintaining the state of the application just in memory after the initial load of the articles and the products, I've decided to update the original article file whenever a product is sell.
+To avoid maintaining the state of the application just in memory after the initial load of the articles and the products, I've decided to update the `inventory.json` file whenever a product is sell.
 
 ## Query available products
 
