@@ -7,6 +7,22 @@ import io.kotlintest.assertions.arrow.either.shouldBeRight
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
+private val AN_ARTICLE = Article(
+    id = IdentificationNumber(1),
+    name = "anArticle",
+    availableStock = 10
+)
+private val ANOTHER_ARTICLE = Article(
+    id = IdentificationNumber(2),
+    name = "anotherArticle",
+    availableStock = 10
+)
+private val AN_UNAVAILABLE_ARTICLE = Article(
+    id = IdentificationNumber(3),
+    name = "anUnavailableArticle",
+    availableStock = 0
+)
+
 class ListAvailableProductsUseCaseTest {
 
     private lateinit var listAvailableProductsUseCase: ListAvailableProductsUseCase
@@ -22,13 +38,7 @@ class ListAvailableProductsUseCaseTest {
                             currency = "EUR",
                             amount = BigDecimal("42.00")
                         ),
-                        articles = listOf(
-                            Article(
-                                id = IdentificationNumber(1),
-                                name = "anArticle",
-                                availableStock = 10
-                            )
-                        )
+                        articles = listOf(AN_ARTICLE)
                     ),
                     Product(
                         name = "anotherProduct",
@@ -36,18 +46,7 @@ class ListAvailableProductsUseCaseTest {
                             currency = "EUR",
                             amount = BigDecimal("50.00")
                         ),
-                        articles = listOf(
-                            Article(
-                                id = IdentificationNumber(2),
-                                name = "anArticle",
-                                availableStock = 10
-                            ),
-                            Article(
-                                id = IdentificationNumber(3),
-                                name = "anotherArticle",
-                                availableStock = 10
-                            )
-                        )
+                        articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
                     )
                 )
             )
@@ -62,13 +61,7 @@ class ListAvailableProductsUseCaseTest {
                         currency = "EUR",
                         amount = BigDecimal("42.00")
                     ),
-                    articles = listOf(
-                        Article(
-                            id = IdentificationNumber(1),
-                            name = "anArticle",
-                            availableStock = 10
-                        )
-                    )
+                    articles = listOf(AN_ARTICLE)
                 ),
                 Product(
                     name = "anotherProduct",
@@ -76,18 +69,7 @@ class ListAvailableProductsUseCaseTest {
                         currency = "EUR",
                         amount = BigDecimal("50.00")
                     ),
-                    articles = listOf(
-                        Article(
-                            id = IdentificationNumber(2),
-                            name = "anArticle",
-                            availableStock = 10
-                        ),
-                        Article(
-                            id = IdentificationNumber(3),
-                            name = "anotherArticle",
-                            availableStock = 10
-                        )
-                    )
+                    articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
                 )
             )
         )
@@ -104,13 +86,7 @@ class ListAvailableProductsUseCaseTest {
                             currency = "EUR",
                             amount = BigDecimal("42.00")
                         ),
-                        articles = listOf(
-                            Article(
-                                id = IdentificationNumber(1),
-                                name = "anArticle",
-                                availableStock = 10
-                            )
-                        )
+                        articles = listOf(AN_ARTICLE)
                     ),
                     Product(
                         name = "anotherProduct",
@@ -118,18 +94,7 @@ class ListAvailableProductsUseCaseTest {
                             currency = "EUR",
                             amount = BigDecimal("50.00")
                         ),
-                        articles = listOf(
-                            Article(
-                                id = IdentificationNumber(2),
-                                name = "anArticle",
-                                availableStock = 10
-                            ),
-                            Article(
-                                id = IdentificationNumber(3),
-                                name = "anUnavailableItem",
-                                availableStock = 0
-                            )
-                        )
+                        articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)
                     )
                 )
             )
@@ -144,13 +109,7 @@ class ListAvailableProductsUseCaseTest {
                         currency = "EUR",
                         amount = BigDecimal("42.00")
                     ),
-                    articles = listOf(
-                        Article(
-                            id = IdentificationNumber(1),
-                            name = "anArticle",
-                            availableStock = 10
-                        )
-                    )
+                    articles = listOf(AN_ARTICLE)
                 )
             )
         )
