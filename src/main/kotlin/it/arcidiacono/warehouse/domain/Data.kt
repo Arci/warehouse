@@ -5,7 +5,12 @@ import java.math.BigDecimal
 data class Product(
     val name: String,
     val price: Money,
-    val articles: List<Article>
+    val billOfMaterials: List<Material>
+)
+
+data class Material(
+    val articleId: ArticleIdentificationNumber,
+    val requiredAmount: Int
 )
 
 data class Money(
@@ -18,9 +23,15 @@ data class Money(
 }
 
 data class Article(
-    val id: IdentificationNumber,
+    val id: ArticleIdentificationNumber,
     val name: String,
     val availableStock: Int
 )
 
-inline class IdentificationNumber(val value: Long)
+inline class ArticleIdentificationNumber(val value: Long)
+
+data class AvailableProduct(
+    val name: String,
+    val price: Money,
+    val availableQuantity: Int
+)

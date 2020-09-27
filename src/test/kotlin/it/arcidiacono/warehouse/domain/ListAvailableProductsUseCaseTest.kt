@@ -8,19 +8,67 @@ import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
 private val AN_ARTICLE = Article(
-    id = IdentificationNumber(1),
+    id = ArticleIdentificationNumber(1),
     name = "anArticle",
-    availableStock = 10
+    availableStock = 5
 )
 private val ANOTHER_ARTICLE = Article(
-    id = IdentificationNumber(2),
+    id = ArticleIdentificationNumber(2),
     name = "anotherArticle",
     availableStock = 10
 )
 private val AN_UNAVAILABLE_ARTICLE = Article(
-    id = IdentificationNumber(3),
+    id = ArticleIdentificationNumber(3),
     name = "anUnavailableArticle",
     availableStock = 0
+)
+private val A_PRODUCT = Product(
+    name = "aProduct",
+    price = Money.euro(BigDecimal("42.00")),
+    billOfMaterials = listOf(
+        Material(
+            articleId = AN_ARTICLE.id,
+            requiredAmount = 4
+        )
+    )
+)
+private val ANOTHER_PRODUCT = Product(
+    name = "anotherProduct",
+    price = Money.euro(BigDecimal("50.00")),
+    billOfMaterials = listOf(
+        Material(
+            articleId = AN_ARTICLE.id,
+            requiredAmount = 1
+        ),
+        Material(
+            articleId = ANOTHER_ARTICLE.id,
+            requiredAmount = 3
+        )
+    )
+)
+private val AN_UNAVAILABLE_PRODUCT = Product(
+    name = "anUnavailableProduct",
+    price = Money.euro(BigDecimal("36.00")),
+    billOfMaterials = listOf(
+        Material(
+            articleId = AN_ARTICLE.id,
+            requiredAmount = 4
+        ),
+        Material(
+            articleId = ANOTHER_ARTICLE.id,
+            requiredAmount = 12
+        )
+    )
+)
+private val ANOTHER_UNAVAILABLE_PRODUCT = Product(
+    name = "anotherUnavailableProduct",
+    price = Money.euro(BigDecimal("30.00")),
+    billOfMaterials = listOf(
+        Material(
+            articleId = AN_UNAVAILABLE_ARTICLE.id,
+            requiredAmount = 3
+        )
+    )
 )
 
 class ListAvailableProductsUseCaseTest {
@@ -28,36 +76,23 @@ class ListAvailableProductsUseCaseTest {
     private lateinit var listAvailableProductsUseCase: ListAvailableProductsUseCase
 
     @Test
-    fun `list all products`() {
-        val productsRepository: ProductsRepository = {
-            Right(
-                listOf(
-                    Product(
-                        name = "aProduct",
-                        price = Money.euro(BigDecimal("42.00")),
-                        articles = listOf(AN_ARTICLE)
-                    ),
-                    Product(
-                        name = "anotherProduct",
-                        price = Money.euro(BigDecimal("50.00")),
-                        articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
-                    )
-                )
-            )
-        }
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+    fun `list available products with their quantities`() {
+        val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
+        val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
 
         listAvailableProductsUseCase().shouldBeRight(
             listOf(
-                Product(
-                    name = "aProduct",
-                    price = Money.euro(BigDecimal("42.00")),
-                    articles = listOf(AN_ARTICLE)
+                AvailableProduct(
+                    name = A_PRODUCT.name,
+                    price = A_PRODUCT.price,
+                    availableQuantity = 1
                 ),
-                Product(
-                    name = "anotherProduct",
-                    price = Money.euro(BigDecimal("50.00")),
-                    articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE)
+                AvailableProduct(
+                    name = ANOTHER_PRODUCT.name,
+                    price = ANOTHER_PRODUCT.price,
+                    availableQuantity = 3
                 )
             )
         )
@@ -65,30 +100,17 @@ class ListAvailableProductsUseCaseTest {
 
     @Test
     fun `when a product is not available is not listed`() {
-        val productsRepository: ProductsRepository = {
-            Right(
-                listOf(
-                    Product(
-                        name = "aProduct",
-                        price = Money.euro(BigDecimal("42.00")),
-                        articles = listOf(AN_ARTICLE)
-                    ),
-                    Product(
-                        name = "anotherProduct",
-                        price = Money.euro(BigDecimal("50.00")),
-                        articles = listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)
-                    )
-                )
-            )
-        }
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+        val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT)) }
+        val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
 
         listAvailableProductsUseCase().shouldBeRight(
             listOf(
-                Product(
-                    name = "aProduct",
-                    price = Money.euro(BigDecimal("42.00")),
-                    articles = listOf(AN_ARTICLE)
+                AvailableProduct(
+                    name = A_PRODUCT.name,
+                    price = A_PRODUCT.price,
+                    availableQuantity = 1
                 )
             )
         )
@@ -97,8 +119,9 @@ class ListAvailableProductsUseCaseTest {
     @Test
     fun `when no product is available`() {
         val productsRepository: ProductsRepository = { Right(listOf()) }
+        val articlesRepository: ArticlesRepository = { Right(listOf()) }
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
 
         listAvailableProductsUseCase().shouldBeRight(listOf())
     }
@@ -106,8 +129,29 @@ class ListAvailableProductsUseCaseTest {
     @Test
     fun `when product repository fails`() {
         val productsRepository: ProductsRepository = { Left(GenericFailure) }
+        val articlesRepository: ArticlesRepository = { Right(listOf()) }
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
+
+        listAvailableProductsUseCase().shouldBeLeft(GenericFailure)
+    }
+
+    @Test
+    fun `when no article is available`() {
+        val productsRepository: ProductsRepository = { Right(listOf()) }
+        val articlesRepository: ArticlesRepository = { Right(listOf()) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
+
+        listAvailableProductsUseCase().shouldBeRight(listOf())
+    }
+
+    @Test
+    fun `when articles repository fails`() {
+        val productsRepository: ProductsRepository = { Right(listOf()) }
+        val articlesRepository: ArticlesRepository = { Left(GenericFailure) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
 
         listAvailableProductsUseCase().shouldBeLeft(GenericFailure)
     }
