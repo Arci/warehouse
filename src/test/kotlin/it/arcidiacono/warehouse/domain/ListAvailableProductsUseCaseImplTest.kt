@@ -71,18 +71,17 @@ private val ANOTHER_UNAVAILABLE_PRODUCT = Product(
     )
 )
 
-class ListAvailableProductsUseCaseTest {
+class ListAvailableProductsUseCaseImplTest {
 
-    private lateinit var listAvailableProductsUseCase: ListAvailableProductsUseCase
+    private lateinit var listAvailableProductsUseCaseImpl: ListAvailableProductsUseCaseImpl
 
     @Test
     fun `list available products with their quantities`() {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, ANOTHER_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeRight(
+        listAvailableProductsUseCaseImpl.execute().shouldBeRight(
             listOf(
                 AvailableProduct(
                     name = A_PRODUCT.name,
@@ -102,10 +101,9 @@ class ListAvailableProductsUseCaseTest {
     fun `when a product is not available is not listed`() {
         val productsRepository: ProductsRepository = { Right(listOf(A_PRODUCT, AN_UNAVAILABLE_PRODUCT, ANOTHER_UNAVAILABLE_PRODUCT)) }
         val articlesRepository: ArticlesRepository = { Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE, AN_UNAVAILABLE_ARTICLE)) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeRight(
+        listAvailableProductsUseCaseImpl.execute().shouldBeRight(
             listOf(
                 AvailableProduct(
                     name = A_PRODUCT.name,
@@ -120,39 +118,35 @@ class ListAvailableProductsUseCaseTest {
     fun `when no product is available`() {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeRight(listOf())
+        listAvailableProductsUseCaseImpl.execute().shouldBeRight(listOf())
     }
 
     @Test
     fun `when product repository fails`() {
         val productsRepository: ProductsRepository = { Left(ProductRepositoryError) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeLeft(ProductRepositoryError)
+        listAvailableProductsUseCaseImpl.execute().shouldBeLeft(ProductRepositoryError)
     }
 
     @Test
     fun `when no article is available`() {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Right(listOf()) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeRight(listOf())
+        listAvailableProductsUseCaseImpl.execute().shouldBeRight(listOf())
     }
 
     @Test
     fun `when articles repository fails`() {
         val productsRepository: ProductsRepository = { Right(listOf()) }
         val articlesRepository: ArticlesRepository = { Left(ArticleRepositoryError) }
+        listAvailableProductsUseCaseImpl = ListAvailableProductsUseCaseImpl(productsRepository, articlesRepository)
 
-        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository, articlesRepository)
-
-        listAvailableProductsUseCase().shouldBeLeft(ArticleRepositoryError)
+        listAvailableProductsUseCaseImpl.execute().shouldBeLeft(ArticleRepositoryError)
     }
 }
