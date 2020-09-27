@@ -1,8 +1,9 @@
 package it.arcidiacono.warehouse.domain
 
+import arrow.core.Left
 import arrow.core.Right
+import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -156,8 +157,20 @@ class ListAvailableProductsUseCaseTest {
     }
 
     @Test
-    @Disabled
     fun `when no product is available`() {
-        TODO("Not yet implemented")
+        val productsRepository: ProductsRepository = { Right(listOf()) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+
+        listAvailableProductsUseCase().shouldBeRight(listOf())
+    }
+
+    @Test
+    fun `when product repository fails`() {
+        val productsRepository: ProductsRepository = { Left(GenericFailure) }
+
+        listAvailableProductsUseCase = ListAvailableProductsUseCase(productsRepository)
+
+        listAvailableProductsUseCase().shouldBeLeft(GenericFailure)
     }
 }

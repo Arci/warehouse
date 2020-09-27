@@ -37,3 +37,4 @@ data class Article(
 inline class IdentificationNumber(val value: Long)
 
 sealed class FailureReason
+object GenericFailure : FailureReason()
