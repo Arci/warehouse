@@ -1,15 +1,12 @@
-package it.arcidiacono.warehouse.domain
+package it.arcidiacono.warehouse.adapter
 
 import arrow.core.Either
 import arrow.core.Left
 import arrow.core.Right
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import it.arcidiacono.warehouse.domain.*
 import java.math.BigDecimal
-import java.nio.charset.StandardCharsets
-
-typealias ProductsRepository = () -> Either<FailureReason, List<Product>>
-typealias ArticlesRepository = () -> Either<FailureReason, List<Article>>
 
 class FileProductsRepository(
     private val productsFile: String
@@ -18,8 +15,8 @@ class FileProductsRepository(
 
     override fun invoke(): Either<FailureReason, List<Product>> =
         try {
-            val productsFile = FixtureLoader.readFile(productsFile)
-            val productsDao = mapper.readValue<ProductsDao>(productsFile)
+            val fileContent = FixtureLoader.readFile(productsFile)
+            val productsDao = mapper.readValue<ProductsDao>(fileContent)
             Right(productsDao.toDomain())
         } catch (e: Exception) {
             Left(ThrowableFailure(e))
@@ -40,30 +37,16 @@ class FileProductsRepository(
         }
 }
 
-data class ArticlesDao(
-    val inventory: List<ArticleDao>
-)
-
-data class ArticleDao(
-    val art_id: Int,
-    val name: String,
-    val stock: Int
-)
-
-data class ProductsDao(
+private data class ProductsDao(
     val products: List<ProductDao>
 )
 
-data class ProductDao(
+private data class ProductDao(
     val name: String,
     val contain_articles: List<MaterialDao>
 )
 
-data class MaterialDao(
+private data class MaterialDao(
     val art_id: Long,
     val amount_of: Int
 )
-
-object FixtureLoader {
-    fun readFile(path: String): String = this.javaClass.getResource(path).readText(StandardCharsets.UTF_8)
-}

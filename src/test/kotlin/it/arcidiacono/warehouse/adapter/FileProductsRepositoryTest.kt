@@ -1,7 +1,11 @@
-package it.arcidiacono.warehouse.domain
+package it.arcidiacono.warehouse.adapter
 
 import io.kotlintest.assertions.arrow.either.shouldBeRight
-import junit.framework.Assert.assertTrue
+import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
+import it.arcidiacono.warehouse.domain.Material
+import it.arcidiacono.warehouse.domain.Money
+import it.arcidiacono.warehouse.domain.Product
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.math.BigDecimal
 
@@ -11,7 +15,7 @@ class FileProductsRepositoryTest {
 
     @Test
     fun `happy path`() {
-        fileProductsRepository = FileProductsRepository("/products.json")
+        fileProductsRepository = FileProductsRepository("/products/products.json")
 
         fileProductsRepository().shouldBeRight(
             listOf(
@@ -52,7 +56,7 @@ class FileProductsRepositoryTest {
 
     @Test
     fun `when no product specified`() {
-        fileProductsRepository = FileProductsRepository("/noProducts.json")
+        fileProductsRepository = FileProductsRepository("/products/noProducts.json")
 
         fileProductsRepository().shouldBeRight(emptyList())
     }

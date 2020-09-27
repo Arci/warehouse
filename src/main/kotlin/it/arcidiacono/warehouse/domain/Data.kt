@@ -1,6 +1,10 @@
 package it.arcidiacono.warehouse.domain
 
+import arrow.core.Either
 import java.math.BigDecimal
+
+typealias ProductsRepository = () -> Either<FailureReason, List<Product>>
+typealias ArticlesRepository = () -> Either<FailureReason, List<Article>>
 
 data class Product(
     val name: String,
