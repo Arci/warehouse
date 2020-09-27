@@ -14,7 +14,7 @@ class FileArticlesRepositoryTest {
     fun `happy path`() {
         fileArticlesRepository = FileArticlesRepository("/articles/inventory.json")
 
-        fileArticlesRepository().shouldBeRight(
+        fileArticlesRepository.fetch().shouldBeRight(
             listOf(
                 Article(
                     id = ArticleIdentificationNumber(1),
@@ -34,13 +34,13 @@ class FileArticlesRepositoryTest {
     fun `when file does not exists`() {
         fileArticlesRepository = FileArticlesRepository("wathever")
 
-        assertTrue(fileArticlesRepository().isLeft())
+        assertTrue(fileArticlesRepository.fetch().isLeft())
     }
 
     @Test
     fun `when no article specified`() {
         fileArticlesRepository = FileArticlesRepository("/articles/noInventory.json")
 
-        fileArticlesRepository().shouldBeRight(emptyList())
+        fileArticlesRepository.fetch().shouldBeRight(emptyList())
     }
 }

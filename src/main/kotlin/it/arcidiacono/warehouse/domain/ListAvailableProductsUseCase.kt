@@ -15,7 +15,7 @@ class ListAvailableProductsUseCaseImpl(
     override fun execute(): Either<FailureReason, List<AvailableProduct>> =
         Either.applicative<FailureReason>().mapN(
             productsRepository(),
-            articlesRepository()
+            articlesRepository.fetch()
         ) { (products, articles) ->
             products.mapNotNull { product ->
                 val sellableQuantity = sellableQuantityFor(product, articles)

@@ -3,21 +3,18 @@ package it.arcidiacono.warehouse.domain
 import arrow.core.*
 import arrow.core.extensions.either.applicative.applicative
 
-typealias UpdateArticles = (id: ArticleIdentificationNumber, quantity: Int) -> Either<FailureReason, Unit>
-
 interface SellProductUseCase {
     fun execute(productName: String, quantity: Int): Either<FailureReason, Unit>
 }
 
 class SellProductUseCaseImpl(
     private val productsRepository: ProductsRepository,
-    private val articlesRepository: ArticlesRepository,
-    private val updateArticles: UpdateArticles
+    private val articlesRepository: ArticlesRepository
 ) : SellProductUseCase {
     override fun execute(productName: String, quantity: Int): Either<FailureReason, Unit> =
         Either.applicative<FailureReason>().mapN(
             productsRepository(),
-            articlesRepository()
+            articlesRepository.fetch()
         ) { (products, articles) ->
             Pair(products, articles)
         }.flatMap { (products, articles) ->
@@ -30,7 +27,7 @@ class SellProductUseCaseImpl(
                             Left(NotEnoughQuantity(sellableQuantity))
                         } else {
                             product.billOfMaterials.forEach { material ->
-                                updateArticles(material.articleId, material.requiredAmount * quantity)
+                                articlesRepository.update(material.articleId, material.requiredAmount * quantity)
                             }
 
                             Right(Unit)

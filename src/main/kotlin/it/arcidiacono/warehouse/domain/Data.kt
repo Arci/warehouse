@@ -4,7 +4,11 @@ import arrow.core.Either
 import java.math.BigDecimal
 
 typealias ProductsRepository = () -> Either<FailureReason, List<Product>>
-typealias ArticlesRepository = () -> Either<FailureReason, List<Article>>
+
+interface ArticlesRepository {
+    fun fetch(): Either<FailureReason, List<Article>>
+    fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit>
+}
 
 data class Product(
     val name: String,

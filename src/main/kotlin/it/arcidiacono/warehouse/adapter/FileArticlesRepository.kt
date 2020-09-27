@@ -12,7 +12,7 @@ class FileArticlesRepository(
 ) : ArticlesRepository {
     private val mapper = jacksonObjectMapper()
 
-    override fun invoke(): Either<FailureReason, List<Article>> =
+    override fun fetch(): Either<FailureReason, List<Article>> =
         try {
             val fileContent = FixtureLoader.readFile(articlesFile)
             val articlesDao = mapper.readValue<ArticlesDao>(fileContent)
@@ -20,6 +20,10 @@ class FileArticlesRepository(
         } catch (e: Exception) {
             Left(ThrowableFailure(e))
         }
+
+    override fun update(id: ArticleIdentificationNumber, quantity: Int): Either<FailureReason, Unit> {
+        TODO("Not yet implemented")
+    }
 
     private fun ArticlesDao.toDomain(): List<Article> =
         this.inventory.map {

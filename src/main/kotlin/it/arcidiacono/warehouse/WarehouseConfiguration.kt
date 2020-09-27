@@ -1,6 +1,5 @@
 package it.arcidiacono.warehouse
 
-import arrow.core.Right
 import it.arcidiacono.warehouse.adapter.FileArticlesRepository
 import it.arcidiacono.warehouse.adapter.FileProductsRepository
 import it.arcidiacono.warehouse.domain.*
@@ -27,8 +26,7 @@ class WarehouseConfiguration {
     ): SellProductUseCase =
         SellProductUseCaseImpl(
             productsRepository,
-            articlesRepository,
-            { _: ArticleIdentificationNumber, _: Int -> Right(Unit) }
+            articlesRepository
         )
 
     @Bean
