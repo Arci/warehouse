@@ -23,6 +23,8 @@
         <!-- Test -->
         <assertj-core.version>3.17.2</assertj-core.version>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
+        <kotlintest.version>2.0.7</kotlintest.version>
+        <kotlintest-assertions-arrow.version>3.1.2</kotlintest-assertions-arrow.version>
     </properties>
 
     <dependencies>
@@ -70,6 +72,18 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.kotlintest</groupId>
+            <artifactId>kotlintest</artifactId>
+            <version>${kotlintest.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.kotlintest</groupId>
+            <artifactId>kotlintest-assertions-arrow</artifactId>
+            <version>${kotlintest-assertions-arrow.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
