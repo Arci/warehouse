@@ -22,9 +22,17 @@ To avoid maintaining the state of the application just in memory after the initi
 System will be queried via REST APIs
 
 
-# APIs
+# Check given specifications
 
-## List available products
+## Acceptance Test
+
+I've created an acceptance test (`WarehouseAcceptanceTest`) that uses the given files and performs some simple operations to guarantee the correctness w.r.t. the specification.
+
+## Running the application
+
+The application reads articles and products from `src/main/resources/data`, it starts on ost 8081 and can be queried through REST APIs. 
+
+### List available products
 
 ```
 GET http://localhost:8081/warehouse/products/available
@@ -55,7 +63,7 @@ example of 200 response:
 
 For simplicity all errors gets translated into 500s.
 
-## Sell a product
+### Sell a product
 
 Products can be sold by hitting the following REST API:
 
