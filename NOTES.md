@@ -22,7 +22,7 @@ To avoid maintaining the state of the application just in memory after the initi
 System will be queried via REST APIs
 
 
-# Check given specifications
+# Check specifications
 
 ## Acceptance Test
 
