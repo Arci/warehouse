@@ -11,7 +11,7 @@ With that simplification a product can be sold by specifying its name, and the d
 The text states that every product has a price but is not specified in the JSON format of the `products.json` example.
 
 For simplicity, I'm assuming all the products cost the same amount (that is hardcoded in the code during adapting). 
-This behaviour can be easily altered by specifying the amounts in the JSON or by fetching this information from another repository.
+This behaviour can be easily altered if the amount will be specified in the JSON or can be fetched from another repository.
 
 ## Products repository
 
@@ -19,18 +19,17 @@ To avoid maintaining the state of the application just in memory after the initi
 
 ## Interact with the system
 
-System will be queried via REST APIs
-
+System will be queried via REST APIs.
 
 # Check specifications
 
 ## Acceptance Test
 
-I've created an acceptance test (`WarehouseAcceptanceTest`) that uses the given files and performs some simple operations to guarantee the correctness w.r.t. the specification.
+I've created an acceptance test (`WarehouseAcceptanceTest`) that uses the given files and performs some simple operations to guarantee the correctness w.r.t. the specifications.
 
-## Running the application
+## Run the application
 
-The application reads articles and products from `src/main/resources/data`, it starts on ost 8081 and can be queried through REST APIs. 
+The application reads articles and products from `src/main/resources/data`, it starts on port 8081 and can be queried through REST APIs. 
 
 ### List available products
 
@@ -88,4 +87,4 @@ response will be 204 (`NO_CONTENT`) when sell succeeds, for simplicity all error
 ## Missing tests
 
 - I haven't created the tests for `ListAvailableProductsEndpoint` and `SellProductEndpoint` since they require a bit of spring boilerplate, what should be verified is the contract that the API is declaring
-- I haven't created a test for `FileDatasource` for time convenience since is a wrapper of some file utils
+- I haven't created a test for `FileDatasource` for time convenience since is mainly a wrapper of some file utils

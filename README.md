@@ -13,4 +13,7 @@ The warehouse should have at least the following functionality:
 
 # Notes
 
-during the development I've made several decisions that I've collected in [NOTES.md](./NOTES.md)
+during the development I've made several decisions that I've collected [here](./NOTES.md)
+
+# Source Code
+Source code can be found on [GitHub](https://github.com/Arci/warehouse).
