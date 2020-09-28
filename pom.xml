@@ -20,8 +20,8 @@
         <java.version>11</java.version>
         <kotlin.version>1.4.10</kotlin.version>
         <arrow.version>0.11.0</arrow.version>
+        <jackson.version>2.9.8</jackson.version>
         <!-- Test -->
-        <assertj-core.version>3.17.2</assertj-core.version>
         <junit.jupiter.version>5.7.0</junit.jupiter.version>
         <kotlintest.version>2.0.7</kotlintest.version>
         <kotlintest-assertions-arrow.version>3.1.2</kotlintest-assertions-arrow.version>
@@ -53,7 +53,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.9.8</version>
+            <version>${jackson.version}</version>
         </dependency>
         <!-- Test -->
         <dependency>
@@ -71,12 +71,6 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
