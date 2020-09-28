@@ -7,7 +7,6 @@ import io.kotlintest.assertions.arrow.either.shouldBeLeft
 import io.kotlintest.assertions.arrow.either.shouldBeRight
 import it.arcidiacono.warehouse.domain.Article
 import it.arcidiacono.warehouse.domain.DatasourceError
-import it.arcidiacono.warehouse.domain.FailureReason
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_ARTICLE
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT
 import it.arcidiacono.warehouse.utils.Fixtures.ANOTHER_PRODUCT_DTO
@@ -24,10 +23,9 @@ class WarehouseRepositoryImplTest {
 
     @Test
     fun `aggregates products and articles`() {
-        warehouseRepositoryImpl = WarehouseRepositoryImpl(
-            stubProductsRepositoryWith(Right(listOf(A_PRODUCT_DTO, ANOTHER_PRODUCT_DTO))),
-            stubArticlesRepositoryWith(Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)))
-        )
+        val productsRepository = stubProductsRepositoryWith(Right(listOf(A_PRODUCT_DTO, ANOTHER_PRODUCT_DTO)))
+        val articlesRepository = stubArticlesRepositoryWith(Right(listOf(AN_ARTICLE, ANOTHER_ARTICLE)))
+        warehouseRepositoryImpl = WarehouseRepositoryImpl(productsRepository, articlesRepository)
 
         warehouseRepositoryImpl.fetch().shouldBeRight(listOf(A_PRODUCT, ANOTHER_PRODUCT))
     }
@@ -35,10 +33,9 @@ class WarehouseRepositoryImplTest {
     @Test
     fun `when product repository fails`() {
         val expectedError = DatasourceError(RuntimeException("something failed :("))
-        warehouseRepositoryImpl = WarehouseRepositoryImpl(
-            stubProductsRepositoryWith(Left(expectedError)),
-            stubArticlesRepositoryWith(Right(emptyList()))
-        )
+        val productsRepository = stubProductsRepositoryWith(Left(expectedError))
+        val articlesRepository = stubArticlesRepositoryWith(Right(emptyList()))
+        warehouseRepositoryImpl = WarehouseRepositoryImpl(productsRepository, articlesRepository)
 
         warehouseRepositoryImpl.fetch().shouldBeLeft(expectedError)
     }
@@ -46,10 +43,9 @@ class WarehouseRepositoryImplTest {
     @Test
     fun `when articles repository fails`() {
         val expectedError = DatasourceError(RuntimeException("something failed :("))
-        warehouseRepositoryImpl = WarehouseRepositoryImpl(
-            stubProductsRepositoryWith(Right(emptyList())),
-            stubArticlesRepositoryWith(Left(expectedError))
-        )
+        val productsRepository = stubProductsRepositoryWith(Right(emptyList()))
+        val articlesRepository = stubArticlesRepositoryWith(Left(expectedError))
+        warehouseRepositoryImpl = WarehouseRepositoryImpl(productsRepository, articlesRepository)
 
         warehouseRepositoryImpl.fetch().shouldBeLeft(expectedError)
     }
@@ -58,9 +54,9 @@ class WarehouseRepositoryImplTest {
     fun `correctly updates articles on sell`() {
         val productsRepository = stubProductsRepositoryWith(Right(emptyList()))
         val articlesRepository = object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = Right(emptyList())
+            override fun fetch(): Either<DatasourceError, List<Article>> = Right(emptyList())
 
-            override fun update(articles: List<Article>): Either<FailureReason, Unit> =
+            override fun update(articles: List<Article>): Either<DatasourceError, Unit> =
                 if (articles == listOf(AN_ARTICLE.copy(availableStock = 1))) {
                     Right(Unit)
                 } else {

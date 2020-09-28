@@ -9,8 +9,8 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import it.arcidiacono.warehouse.domain.*
 
 interface ArticlesRepository {
-    fun fetch(): Either<FailureReason, List<Article>>
-    fun update(articles: List<Article>): Either<FailureReason, Unit>
+    fun fetch(): Either<RepositoryError, List<Article>>
+    fun update(articles: List<Article>): Either<RepositoryError, Unit>
 }
 
 class JsonArticlesRepository(
@@ -18,14 +18,14 @@ class JsonArticlesRepository(
 ) : ArticlesRepository {
     private val mapper = jacksonObjectMapper()
 
-    override fun fetch(): Either<FailureReason, List<Article>> =
+    override fun fetch(): Either<RepositoryError, List<Article>> =
         datasource.read().flatMap {
             it.asJson().map { articlesDao ->
                 articlesDao.toDomain()
             }
         }
 
-    override fun update(articles: List<Article>): Either<FailureReason, Unit> =
+    override fun update(articles: List<Article>): Either<RepositoryError, Unit> =
         fetch().flatMap { allArticles ->
             val updatedArticles = allArticles.map { oldArticle ->
                 val newArticle = articles.find { it.id == oldArticle.id }
@@ -34,7 +34,7 @@ class JsonArticlesRepository(
             writeAsJson(updatedArticles.toRepresentation())
         }
 
-    private fun String.asJson(): Either<FailureReason, InventoryDao> =
+    private fun String.asJson(): Either<RepositoryError, InventoryDao> =
         try {
             Right(mapper.readValue(this))
         } catch (e: Exception) {
@@ -61,7 +61,7 @@ class JsonArticlesRepository(
             }
         )
 
-    private fun writeAsJson(articleDao: InventoryDao): Either<FailureReason, Unit> =
+    private fun writeAsJson(articleDao: InventoryDao): Either<RepositoryError, Unit> =
         try {
             val content = mapper.writeValueAsString(articleDao)
             datasource.write(content)

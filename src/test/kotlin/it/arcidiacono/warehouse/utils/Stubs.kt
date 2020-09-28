@@ -14,7 +14,7 @@ val inMemoryDatasource: (String) -> Datasource =
         object : Datasource {
             private var content: String = "initial"
 
-            override fun read(): Either<FailureReason, String> {
+            override fun read(): Either<RepositoryError, String> {
                 if (content == "initial") {
                     try {
                         content = javaClass.getResource(filePath).readText()
@@ -26,34 +26,34 @@ val inMemoryDatasource: (String) -> Datasource =
                 return Right(content)
             }
 
-            override fun write(content: String): Either<FailureReason, Unit> {
+            override fun write(content: String): Either<RepositoryError, Unit> {
                 this.content = content
                 return Right(Unit)
             }
         }
     }
 
-val stubWarehouseRepositoryFetchWith: (Either<FailureReason, List<Product>>) -> WarehouseRepository =
+val stubWarehouseRepositoryFetchWith: (Either<RepositoryError, List<Product>>) -> WarehouseRepository =
     { result ->
         object : WarehouseRepository {
-            override fun fetch(): Either<FailureReason, List<Product>> = result
+            override fun fetch(): Either<RepositoryError, List<Product>> = result
 
-            override fun sell(product: Product, quantity: Int): Either<FailureReason, Unit> = Right(Unit)
+            override fun sell(product: Product, quantity: Int): Either<RepositoryError, Unit> = Right(Unit)
         }
     }
 
-val stubProductsRepositoryWith: (Either<FailureReason, List<ProductDto>>) -> ProductsRepository =
+val stubProductsRepositoryWith: (Either<RepositoryError, List<ProductDto>>) -> ProductsRepository =
     { result ->
         object : ProductsRepository {
-            override fun fetch(): Either<FailureReason, List<ProductDto>> = result
+            override fun fetch(): Either<RepositoryError, List<ProductDto>> = result
         }
     }
 
-val stubArticlesRepositoryWith: (Either<FailureReason, List<Article>>) -> ArticlesRepository =
+val stubArticlesRepositoryWith: (Either<RepositoryError, List<Article>>) -> ArticlesRepository =
     { result ->
         object : ArticlesRepository {
-            override fun fetch(): Either<FailureReason, List<Article>> = result
+            override fun fetch(): Either<RepositoryError, List<Article>> = result
 
-            override fun update(articles: List<Article>): Either<FailureReason, Unit> = Right(Unit)
+            override fun update(articles: List<Article>): Either<RepositoryError, Unit> = Right(Unit)
         }
     }

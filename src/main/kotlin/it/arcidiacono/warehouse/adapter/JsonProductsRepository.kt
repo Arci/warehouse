@@ -7,13 +7,13 @@ import arrow.core.flatMap
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import it.arcidiacono.warehouse.domain.ArticleIdentificationNumber
-import it.arcidiacono.warehouse.domain.FailureReason
 import it.arcidiacono.warehouse.domain.Money
 import it.arcidiacono.warehouse.domain.ProductsDeserializationError
+import it.arcidiacono.warehouse.domain.RepositoryError
 import java.math.BigDecimal
 
 interface ProductsRepository {
-    fun fetch(): Either<FailureReason, List<ProductDto>>
+    fun fetch(): Either<RepositoryError, List<ProductDto>>
 }
 
 data class ProductDto(
@@ -32,14 +32,14 @@ class JsonProductsRepository(
 ) : ProductsRepository {
     private val mapper = jacksonObjectMapper()
 
-    override fun fetch(): Either<FailureReason, List<ProductDto>> =
+    override fun fetch(): Either<RepositoryError, List<ProductDto>> =
         datasource.read().flatMap {
             it.asJson().map { productsDao ->
                 productsDao.toDomain()
             }
         }
 
-    private fun String.asJson(): Either<FailureReason, ProductsDao> =
+    private fun String.asJson(): Either<RepositoryError, ProductsDao> =
         try {
             Right(mapper.readValue(this))
         } catch (e: Exception) {

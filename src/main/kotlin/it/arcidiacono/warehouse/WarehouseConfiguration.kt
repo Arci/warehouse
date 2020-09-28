@@ -1,6 +1,9 @@
 package it.arcidiacono.warehouse
 
-import it.arcidiacono.warehouse.adapter.*
+import it.arcidiacono.warehouse.adapter.FileDatasource
+import it.arcidiacono.warehouse.adapter.JsonArticlesRepository
+import it.arcidiacono.warehouse.adapter.JsonProductsRepository
+import it.arcidiacono.warehouse.adapter.WarehouseRepositoryImpl
 import it.arcidiacono.warehouse.domain.*
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -21,18 +24,9 @@ class WarehouseConfiguration {
         SellProductUseCaseImpl(warehouseRepository)
 
     @Bean
-    fun warehouseRepository(
-        productsRepository: ProductsRepository,
-        articlesRepository: ArticlesRepository
-    ): WarehouseRepository =
+    fun warehouseRepository(): WarehouseRepository =
         WarehouseRepositoryImpl(
-            productsRepository,
-            articlesRepository
+            JsonProductsRepository(FileDatasource("/data/products.json")),
+            JsonArticlesRepository(FileDatasource("/data/inventory.json"))
         )
-
-    @Bean
-    fun articlesRepository(): ArticlesRepository = JsonArticlesRepository(FileDatasource("/data/inventory.json"))
-
-    @Bean
-    fun productsRepository(): ProductsRepository = JsonProductsRepository(FileDatasource("/data/products.json"))
 }

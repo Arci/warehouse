@@ -32,7 +32,7 @@ class JsonArticlesRepositoryTest {
     }
 
     @Test
-    fun `when file does not exists`() {
+    fun `when datasource fails`() {
         jsonArticlesRepository = JsonArticlesRepository(inMemoryDatasource("whatever"))
 
         assertTrue(jsonArticlesRepository.fetch().isLeft())
